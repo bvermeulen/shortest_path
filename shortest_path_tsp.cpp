@@ -293,8 +293,8 @@ void swapElement(int index, vector<Point> &path)
 
 int main(int argc, char *argv[])
 {
-    // ArgParams args = parseArgs(argc, argv);
-    ArgParams args = setArgs();
+    ArgParams args = parseArgs(argc, argv);
+    //ArgParams args = setArgs();
 
     if (args.startElement == -1)
     {
