@@ -17,10 +17,10 @@
 #include <sstream>
 #include <iomanip>
 #include "csv.h"
+#include "shortest_path_tsp.h"
 
 using namespace std;
 
-const float rad_deg = 180 / 3.14159;
 const float cruiseSpeed = 15.0, accelaration = 2, deceleration = 1, upDelay = 2, downDelay = 3;
 const float instDelay = 0.0, sweep = 9.0;
 const float angleDelay30 = 8, angleDelay60 = 6, angleDelay90 = 5, angleDelay120 = 3, angleDelay150 = 1, angleDelay180 = 0;
@@ -31,44 +31,6 @@ struct ArgParams
     string fileName;
     int startElement;
     float improvementThreshold;
-};
-
-class Point
-{
-public:
-    string id;
-    float x, y;
-
-    Point(string id, float x, float y)
-    {
-        this->id = id;
-        this->x = x;
-        this->y = y;
-    }
-    Point()
-    {
-        this->id = "0";
-        this->x = 0.0;
-        this->y = 0.0;
-    }
-    // Distance between two points
-    inline float dist(const Point &other) const
-    {
-        return sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
-    }
-    // Angle of the vector between two points with the x-axis
-    inline float angle(const Point &other) const
-    {
-        float angle;
-        angle = rad_deg * atan2(other.y - y, other.x - x);
-        if (angle < 0.0)
-            angle += 360;
-        if (angle > 180.0)
-            angle = abs(angle - 360.0);
-        if (angle > 90.0)
-            angle = abs(angle - 180.0);
-        return angle;
-    }
 };
 
 ArgParams setArgs()
@@ -241,7 +203,7 @@ void printNodes(vector<pair<string, vector<string>>> &csvData, bool printData)
     string h1 = csvData[0].first;
     string h2 = csvData[1].first;
     string h3 = csvData[2].first;
-    printf("number of nodes: %3d\n", csvData[0].second.size());
+    printf("number of nodes: %3llu\n", csvData[0].second.size());
     if (!printData)
         return;
     for (unsigned int i = 0; i < csvData[0].second.size(); i++)
@@ -310,7 +272,7 @@ int main(int argc, char *argv[])
     // swap first element to desired start point
     if (startElement > path.size())
     {
-        printf("Swap element %d must be less than %d", startElement, path.size());
+        printf("Swap element %d must be less than %llu", startElement, path.size());
         return -1;
     }
     swapElement(startElement, path);
@@ -344,6 +306,7 @@ int main(int argc, char *argv[])
         printf("\nbest distance: %.0f, improvement factor: %.6f", bestDistance, improvementFactor);
     }
     printf("\n\n");
+    plotPaths(path);
     vector<pair<string, vector<string>>> csvOutData = createCsvData(path);
     printNodes(csvOutData, false);
     string const csvOutFile = csvFile.substr(0, csvFile.find_last_of(".csv") - 3) + "_solution.csv";

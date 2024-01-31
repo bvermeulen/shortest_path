@@ -1,18 +1,28 @@
 CC=g++
-CFLAGS=-I. -Wall -g
-DEPS = csv.h
-OBJ = shortest_path_tsp.o csv.o
+PPYTHON = c:/users/bruno/appdata/local/programs/python/python312
+PMPL17 = d:/cpp/matplotlibcpp17
+PPYBIND11 = d:/cpp/pybind11
+IDIR = -I $(PPYTHON)/include -I $(PMPL17)/include -I $(PPYBIND11)/include -I $(PXTL)/include -I $(PXTENSOR)/include -I ./include
+LIB = -L $(PPYTHON)/libs -lpython312
+CFLAGS=-Wall -g
+LFLAGS=-Wall
+CVERSION=c++17
+SDIR = .\src
+BIN = .\bin
+SRCFILE = shortest_path_tsp
 
-#%.o: %.cpp (DEPS)
-%.o: %.cpp
-	$(CC) --std=c++17 -c -o $@ $< $(CFLAGS)
+OBJDIR = .\objects
+_OBJ = shortest_path_tsp.o plot_paths.o csv.o
+OBJ = $(patsubst %, $(OBJDIR)/%, $(_OBJ))
 
-shortest_path_tsp: $(OBJ)
-	$(CC) --std=c++17 -o $@ $^ $(CFLAGS)
+$(OBJDIR)/%.o: $(SDIR)/%.cpp
+	$(CC) --std=$(CVERSION) -c -o $@ $< $(IDIR) $(CFLAGS)
 
-clean_o:
-	del $(OBJ)
+$(SRCFILE): $(OBJ)
+	$(CC) --std=$(CVERSION) -o $(BIN)/$@ $^ $(LFLAGS) $(LIB)
 
 clean:
-	del $(OBJ) shortest_path_tsp.exe
+	@echo Clean object files in $(OBJDIR) and executable in $(BIN)
+	del /Q /F $(BIN)\$(SRCFILE).exe
+	del /Q /F $(OBJDIR)\*.o
 
