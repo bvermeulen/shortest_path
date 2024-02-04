@@ -1,5 +1,5 @@
 #ifndef CSV_H
-#define CSH_H 1
+#define CSV_H
 
 #include <vector>
 #include <sstream>

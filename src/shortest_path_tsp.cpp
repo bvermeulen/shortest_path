@@ -17,7 +17,8 @@
 #include <sstream>
 #include <iomanip>
 #include "csv.h"
-#include "shortest_path_tsp.h"
+#include "point.h"
+#include "plot_paths_class.h"
 
 using namespace std;
 
@@ -255,6 +256,7 @@ void swapElement(int index, vector<Point> &path)
 
 int main(int argc, char *argv[])
 {
+    PlotPaths myPlt;
     ArgParams args = parseArgs(argc, argv);
     //ArgParams args = setArgs();
 
@@ -283,7 +285,9 @@ int main(int argc, char *argv[])
     float newDistance, distanceToBeat;
     float improvementFactor = 1.0;
 
-    printf("\nbest distance: %.0f, improvement factor: %.6f", bestDistance, improvementFactor);
+    printf("\nbest distance: %.0f, improvement factor: %.6f\n", bestDistance, improvementFactor);
+    myPlt.plotMyPath(path);
+    myPlt.Blit(2);
 
     while (improvementFactor > improvementThreshold)
     {
@@ -303,10 +307,13 @@ int main(int argc, char *argv[])
             }
         }
         improvementFactor = 1.0 - bestDistance / distanceToBeat;
-        printf("\nbest distance: %.0f, improvement factor: %.6f", bestDistance, improvementFactor);
+        printf("\nbest distance: %.0f, improvement factor: %.6f\n", bestDistance, improvementFactor);
+        myPlt.plotMyPath(path);
+        myPlt.Blit(2);
     }
     printf("\n\n");
-    plotPaths(path);
+    myPlt.plotMyPath(path);
+    myPlt.Show();
     vector<pair<string, vector<string>>> csvOutData = createCsvData(path);
     printNodes(csvOutData, false);
     string const csvOutFile = csvFile.substr(0, csvFile.find_last_of(".csv") - 3) + "_solution.csv";

@@ -18,8 +18,12 @@ https://github.com/jvkersch/pyconcorde
 https://pypi.org/project/tsp-solver2/ (recommended)
 
 
-CPP
+CSV
 https://www.gormanalysis.com/blog/reading-and-writing-csv-files-with-cpp/ (read and write csv)
+
+matplotlibcpp17
+https://soblin.github.io/matplotlibcpp17/
+
 
 
 

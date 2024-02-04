@@ -1,9 +1,10 @@
 /*
-General used constands and classes for shortest_path_tst
+General used constants and classes for shortest_path_tst
 */
+#ifndef POINT_H
+#define POINT_H
 
 using namespace std;
-
 const float rad_deg = 180 / 3.14159;
 
 class Point
@@ -44,4 +45,4 @@ public:
     }
 };
 
-void plotPaths(vector<Point> &path);
+#endif

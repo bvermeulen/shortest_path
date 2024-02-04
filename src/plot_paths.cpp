@@ -2,6 +2,7 @@
 #include "shortest_path_tsp.h"
 #include <vector>
 
+
 void plotPaths(vector<Point> &path)
 {
 	float x0, x1, y0, y1;
@@ -18,5 +19,5 @@ void plotPaths(vector<Point> &path)
 		y1 = path[i+1].y;
 		ax.plot(Args(py::make_tuple(x0, x1), py::make_tuple(y0, y1)));
 	}
-  plt.show();
+  	plt.show();
 }

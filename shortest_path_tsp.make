@@ -12,7 +12,7 @@ BIN = .\bin
 SRCFILE = shortest_path_tsp
 
 OBJDIR = .\objects
-_OBJ = shortest_path_tsp.o plot_paths.o csv.o
+_OBJ = $(SRCFILE).o csv.o
 OBJ = $(patsubst %, $(OBJDIR)/%, $(_OBJ))
 
 $(OBJDIR)/%.o: $(SDIR)/%.cpp
@@ -22,7 +22,12 @@ $(SRCFILE): $(OBJ)
 	$(CC) --std=$(CVERSION) -o $(BIN)/$@ $^ $(LFLAGS) $(LIB)
 
 clean:
-	@echo Clean object files in $(OBJDIR) and executable in $(BIN)
+	@echo Clean main app object file in $(OBJDIR) and executable in $(BIN)
+	del /Q /F $(BIN)\$(SRCFILE).exe
+	del /Q /F $(OBJDIR)\$(SRCFILE).o
+
+clean_o:
+	@echo Clean all object files in $(OBJDIR) and executable in $(BIN)
 	del /Q /F $(BIN)\$(SRCFILE).exe
 	del /Q /F $(OBJDIR)\*.o
 
