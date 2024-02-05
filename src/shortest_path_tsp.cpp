@@ -286,7 +286,7 @@ int main(int argc, char *argv[])
     float newDistance, distanceToBeat;
     float improvementFactor = 1.0;
 
-    printf("\nbest distance: %.0f, improvement factor: %.6f\n", bestDistance, improvementFactor);
+    printf("\nbest distance: %.0f, improvement factor: %.6f", bestDistance, improvementFactor);
     myPlt.plotFullPath(path);
     myPlt.Save();
     myPlt.Blit(2);
@@ -309,7 +309,7 @@ int main(int argc, char *argv[])
             }
         }
         improvementFactor = 1.0 - bestDistance / distanceToBeat;
-        printf("\nbest distance: %.0f, improvement factor: %.6f\n", bestDistance, improvementFactor);
+        printf("\nbest distance: %.0f, improvement factor: %.6f", bestDistance, improvementFactor);
         myPlt.plotFullPath(path);
         myPlt.Save();
         myPlt.Blit(2);

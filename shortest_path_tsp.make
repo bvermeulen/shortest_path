@@ -2,7 +2,7 @@ CC=g++
 PPYTHON = c:/users/bruno/appdata/local/programs/python/python312
 PMPL17 = d:/cpp/matplotlibcpp17
 PPYBIND11 = d:/cpp/pybind11
-IDIR = -I $(PPYTHON)/include -I $(PMPL17)/include -I $(PPYBIND11)/include -I $(PXTL)/include -I $(PXTENSOR)/include -I ./include
+IDIR = -I $(PPYTHON)/include -I $(PMPL17)/include -I $(PPYBIND11)/include -I ./include
 LIB = -L $(PPYTHON)/libs -lpython312
 CFLAGS=-Wall -g
 LFLAGS=-Wall
@@ -22,12 +22,12 @@ $(SRCFILE): $(OBJ)
 	$(CC) --std=$(CVERSION) -o $(BUILD)/$@ $^ $(LFLAGS) $(LIB)
 
 clean:
-	@echo Clean main app object file in $(OBJDIR) and executable in $(BIN)
+	@echo Clean main app object file in $(OBJDIR) and executable in $(BUILD)
 	del /Q /F $(BUILD)\$(SRCFILE).exe
 	del /Q /F $(OBJDIR)\$(SRCFILE).o
 
 clean_o:
-	@echo Clean all object files in $(OBJDIR) and executable in $(BIN)
+	@echo Clean all object files in $(OBJDIR) and executable in $(BUILD)
 	del /Q /F $(BUILD)\$(SRCFILE).exe
 	del /Q /F $(OBJDIR)\*.o
 

@@ -1,5 +1,6 @@
 #include <matplotlibcpp17/pyplot.h>
 #include <sstream>
+#include <shortest_path_tsp.h>
 #include <point.h>
 #include <plotpaths.h>
 #include <vector>
@@ -38,7 +39,6 @@ void PlotPaths::Show() {
 };
 
 void PlotPaths::Save() {
-	string baseFileName = "shortest_path_tsp_";
-	string const OutFile = baseFileName + to_string(this->counter) + ".png";
+	string const OutFile = pngBaseFileName + to_string(this->counter) + ".png";
  	fig.savefig(Args(OutFile.c_str()));
 };
