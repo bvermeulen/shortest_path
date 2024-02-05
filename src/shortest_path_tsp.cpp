@@ -16,9 +16,10 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
-#include "csv.h"
-#include "point.h"
-#include "plot_paths_class.h"
+#include <shortest_path_tsp.h>
+#include <csv.h>
+#include <point.h>
+#include <plotpaths.h>
 
 using namespace std;
 
@@ -286,7 +287,8 @@ int main(int argc, char *argv[])
     float improvementFactor = 1.0;
 
     printf("\nbest distance: %.0f, improvement factor: %.6f\n", bestDistance, improvementFactor);
-    myPlt.plotMyPath(path);
+    myPlt.plotFullPath(path);
+    myPlt.Save();
     myPlt.Blit(2);
 
     while (improvementFactor > improvementThreshold)
@@ -308,11 +310,13 @@ int main(int argc, char *argv[])
         }
         improvementFactor = 1.0 - bestDistance / distanceToBeat;
         printf("\nbest distance: %.0f, improvement factor: %.6f\n", bestDistance, improvementFactor);
-        myPlt.plotMyPath(path);
+        myPlt.plotFullPath(path);
+        myPlt.Save();
         myPlt.Blit(2);
     }
     printf("\n\n");
-    myPlt.plotMyPath(path);
+    myPlt.plotFullPath(path);
+    myPlt.Save();
     myPlt.Show();
     vector<pair<string, vector<string>>> csvOutData = createCsvData(path);
     printNodes(csvOutData, false);

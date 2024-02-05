@@ -8,26 +8,26 @@ CFLAGS=-Wall -g
 LFLAGS=-Wall
 CVERSION=c++17
 SDIR = .\src
-BIN = .\bin
+BUILD = .\build
 SRCFILE = shortest_path_tsp
 
 OBJDIR = .\objects
-_OBJ = $(SRCFILE).o csv.o
+_OBJ = $(SRCFILE).o csv.o point.o plotpaths.o
 OBJ = $(patsubst %, $(OBJDIR)/%, $(_OBJ))
 
 $(OBJDIR)/%.o: $(SDIR)/%.cpp
 	$(CC) --std=$(CVERSION) -c -o $@ $< $(IDIR) $(CFLAGS)
 
 $(SRCFILE): $(OBJ)
-	$(CC) --std=$(CVERSION) -o $(BIN)/$@ $^ $(LFLAGS) $(LIB)
+	$(CC) --std=$(CVERSION) -o $(BUILD)/$@ $^ $(LFLAGS) $(LIB)
 
 clean:
 	@echo Clean main app object file in $(OBJDIR) and executable in $(BIN)
-	del /Q /F $(BIN)\$(SRCFILE).exe
+	del /Q /F $(BUILD)\$(SRCFILE).exe
 	del /Q /F $(OBJDIR)\$(SRCFILE).o
 
 clean_o:
 	@echo Clean all object files in $(OBJDIR) and executable in $(BIN)
-	del /Q /F $(BIN)\$(SRCFILE).exe
+	del /Q /F $(BUILD)\$(SRCFILE).exe
 	del /Q /F $(OBJDIR)\*.o
 
