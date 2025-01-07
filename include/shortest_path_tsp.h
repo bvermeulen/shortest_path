@@ -1,5 +1,5 @@
 /*
-General used constants
+	General used constants
 */
 #ifndef SHORTESTPATH
 #define  SHORTESTPATH

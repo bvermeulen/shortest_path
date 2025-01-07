@@ -13,7 +13,7 @@ def load_nodes(csv_file_name):
         np.genfromtxt(
             csv_file_name,
             delimiter=",",
-            converters={0: lambda s: s.decode()},
+            #converters={0: lambda s: s.decode()},
         ).tolist(),
         dtype=object,
     )
