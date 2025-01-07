@@ -21,11 +21,13 @@ $(OBJDIR)/%.o: $(SDIR)/%.cpp
 $(SRCFILE): $(OBJ)
 	$(CC) --std=$(CVERSION) -o $(BUILD)/$@ $^ $(LFLAGS) $(LIB)
 
+.PHONY: clean
 clean:
 	@echo Clean main app object file in $(OBJDIR) and executable in $(BUILD)
 	rm $(BUILD)/$(SRCFILE).exe
 	rm $(OBJDIR)/$(SRCFILE).o
 
+.PHONY: clean_o
 clean_o:
 	@echo Clean all object files in $(OBJDIR) and executable in $(BUILD)
 	rm $(OBJDIR)/*.o
