@@ -4,7 +4,7 @@ PMPL17 = d:/cpp/matplotlibcpp17
 PPYBIND11 = d:/cpp/pybind11
 IDIR = -I $(PPYTHON)/include -I $(PMPL17)/include -I $(PPYBIND11)/include -I ./include
 LIB = -L $(PPYTHON)/libs -lpython313
-CFLAGS=-Wall -g
+CFLAGS=-Wall -g -fvisibility=hidden
 LFLAGS=-Wall
 CVERSION=c++17
 SDIR = ./src
