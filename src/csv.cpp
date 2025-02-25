@@ -1,5 +1,7 @@
 #include <csv.h>
 #include <fstream>
+#include <iomanip>
+#include <point.h>
 
 using namespace std;
 
@@ -74,4 +76,51 @@ vector<pair<string, vector<string>>> read_csv(string filename)
     }
     myFile.close();
     return result;
+}
+
+// Create a path based on csv data
+vector<Point> createPath(vector<pair<string, vector<string>>> &csvData)
+{
+    vector<Point> path;
+    for (unsigned int i = 0; i < csvData[1].second.size(); i++)
+    {
+        path.push_back(Point(csvData[0].second[i], stof(csvData[1].second[i]), stof(csvData[2].second[i])));
+    }
+    return path;
+}
+
+// Create csv data based on path and convert values to string with 1 decimal
+vector<pair<string, vector<string>>> createCsvData(vector<Point> &path)
+{
+    vector<string> id, x, y;
+    ostringstream valStream;
+    for (unsigned int i = 0; i < path.size(); i++)
+    {
+        id.push_back(path[i].id);
+        valStream.str("");
+        valStream << fixed << setprecision(1) << path[i].x;
+        x.push_back(valStream.str());
+        valStream.str("");
+        valStream << fixed << setprecision(1) << path[i].y;
+        y.push_back(valStream.str());
+    }
+    vector<pair<string, vector<string>>> csvData{{"label", id}, {"easting", x}, {"northing", y}};
+    return csvData;
+}
+
+// Print the nodes
+void printNodes(vector<pair<string, vector<string>>> &csvData, bool printData)
+{
+    string h1 = csvData[0].first;
+    string h2 = csvData[1].first;
+    string h3 = csvData[2].first;
+    printf("number of nodes: %3llu\n", csvData[0].second.size());
+    if (!printData)
+        return;
+    for (unsigned int i = 0; i < csvData[0].second.size(); i++)
+    {
+        printf("%s: %s, %s: %.1f, %s: %.1f\n",
+               h1.c_str(), csvData[0].second[i].c_str(), h2.c_str(),
+               stof(csvData[1].second[i]), h3.c_str(), stof(csvData[2].second[i]));
+    }
 }
