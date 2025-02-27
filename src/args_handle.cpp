@@ -57,7 +57,7 @@ int parseArgumentIndex(string token, vector<pair<string, vector<string>>> &csvDa
 			return -1;
 		}
 
-		if (value > numberPoints)
+		if (value > numberPoints - 1)
 		{
 			printf("Index %d must be less than %d\n", value, numberPoints);
 			return -1;
@@ -121,6 +121,8 @@ ArgParams parseArgs(int argc, char *argv[], vector<pair<string, vector<string>>>
 	args.startIndex = -1;
 	args.endIndex = -1;
 	args.improvementThreshold = defaultImprovementThreshold;
+	int numberPoints = (int)csvData[0].second.size();
+
 	switch (argc)
 	{
 	case 1: // No input file
@@ -131,14 +133,14 @@ ArgParams parseArgs(int argc, char *argv[], vector<pair<string, vector<string>>>
 	case 2: // only filename given
 	{
 		args.startIndex = 0;
-		args.endIndex = 0;
+		args.endIndex = numberPoints - 1;
 		args.improvementThreshold = defaultImprovementThreshold;
 		break;
 	}
 	case 3: // filename and threshold given
 	{
 		args.startIndex = 0;
-		args.endIndex = 0;
+		args.endIndex = numberPoints - 1;
 		args.improvementThreshold = parseArgumentFloat(argv[2]);
 		if (args.improvementThreshold < 0.0)
 		{
