@@ -20,7 +20,7 @@ struct ArgParams
 string getFileName(int argc, char *argv[]);
 ArgParams setArgs();
 ArgParams parseArgs(int argc, char *argv[], vector<pair<string, vector<string>>> &csvData);
-void swapStartElement(int index, vector<Point> &path);
-void swapEndElement(int index, vector<Point> &path);
+void setStartIndex(int index, vector<Point> &path);
+void setEndIndex(int index, vector<Point> &path);
 
 #endif // ARGS_HANDLE

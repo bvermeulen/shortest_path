@@ -104,9 +104,9 @@ int main(int argc, char *argv[])
     int endElement = args.endElement;
     float improvementThreshold = args.improvementThreshold;
     printNodes(csvData, false);
-    // swap first element to desired start point
-    swapStartElement(startElement, path);
-    swapEndElement(endElement, path);
+    // set the index for start point and end point
+    setStartIndex(startElement, path);
+    setEndIndex(endElement, path);
 
     int n = path.size();
     vector<Point> newPath;

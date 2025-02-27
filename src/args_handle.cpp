@@ -175,7 +175,7 @@ ArgParams parseArgs(int argc, char *argv[], vector<pair<string, vector<string>>>
 }
 
 // set index to the front of the path (start point)
-void swapStartElement(int index, vector<Point> &path)
+void setStartIndex(int index, vector<Point> &path)
 {
 	if (index == 0)
 		return;
@@ -186,7 +186,7 @@ void swapStartElement(int index, vector<Point> &path)
 }
 
 // set index to the back of the path (end point)
-void swapEndElement(int index, vector<Point> &path)
+void setEndIndex(int index, vector<Point> &path)
 {
 	if (index == 0)
 		return;
