@@ -3,7 +3,8 @@ header for point.cpp
 */
 #ifndef POINT_H
 #define POINT_H
-#include <sstream>
+
+#include <bits/stdc++.h>
 
 using namespace std;
 

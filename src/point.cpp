@@ -1,12 +1,9 @@
 /*
 Class definition of Point
 */
-#include <shortest_path_tsp.h>
 #include <point.h>
-#include <sstream>
 #include <math.h>
-
-using namespace std;
+#include <shortest_path_tsp.h>
 
 Point::Point(string id, float x, float y)
 {

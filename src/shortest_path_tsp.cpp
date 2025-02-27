@@ -6,6 +6,7 @@
         2 - if value between 0 and 1 it is the threshold, otherwise is the element in the list
             where path must start (must be an integer >= 0) (optional)
         3 - threshold (must be between 0 and 1) (optional)
+        4 - start and end points
 
     start element default value is 0, threshold default value is 0.001
 
@@ -93,22 +94,17 @@ void do2Opt(vector<Point> &path, int i, int j)
 int main(int argc, char *argv[])
 {
     PlotPaths myPlt;
-    ArgParams args = parseArgs(argc, argv);
-    // ArgParams args = setArgs();
-
-    string csvFile = args.fileName;
-    unsigned int startElement = (unsigned int)args.startElement;
-    unsigned int endElement = (unsigned int)args.endElement;
-    float improvementThreshold = args.improvementThreshold;
+    string csvFile = getFileName(argc, argv);
     vector<pair<string, vector<string>>> csvData = read_csv(csvFile);
-    printNodes(csvData, false);
+    ArgParams args = parseArgs(argc, argv, csvData);
+    // ArgParams args = setArgs();
     vector<Point> path = createPath(csvData);
+
+    int startElement = args.startElement;
+    int endElement = args.endElement;
+    float improvementThreshold = args.improvementThreshold;
+    printNodes(csvData, false);
     // swap first element to desired start point
-    if ((startElement > path.size()) | (endElement > path.size()))
-    {
-        printf("Swap elemensts %d, %d must be less than %llu", startElement, endElement, path.size());
-        return -1;
-    }
     swapStartElement(startElement, path);
     swapEndElement(endElement, path);
 

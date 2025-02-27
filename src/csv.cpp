@@ -1,32 +1,31 @@
+#include <bits/stdc++.h>
 #include <csv.h>
-#include <fstream>
-#include <iomanip>
 #include <point.h>
 
 using namespace std;
 
-void write_csv(string filename, vector<pair<string, vector<string>>> dataset)
+void write_csv(string filename, vector<pair<string, vector<string>>> csvData)
 {
     // Make a CSV file with one or more columns of integer values
 
     ofstream myFile(filename);
 
     // Send column names to the stream
-    for (unsigned int i = 0; i < dataset.size(); ++i)
+    for (unsigned int i = 0; i < csvData.size(); ++i)
     {
-        myFile << dataset[i].first;
-        if (i != dataset.size() - 1)
+        myFile << csvData[i].first;
+        if (i != csvData.size() - 1)
             myFile << ",";
     }
     myFile << "\n";
 
     // Send data to the stream
-    for (unsigned int i = 0; i < dataset[0].second.size(); ++i)
+    for (unsigned int i = 0; i < csvData[0].second.size(); ++i)
     {
-        for (unsigned int j = 0; j < dataset.size(); ++j)
+        for (unsigned int j = 0; j < csvData.size(); ++j)
         {
-            myFile << dataset[j].second[i];
-            if (j != dataset.size() - 1)
+            myFile << csvData[j].second[i];
+            if (j != csvData.size() - 1)
                 myFile << ",";
         }
         myFile << "\n";
@@ -36,7 +35,7 @@ void write_csv(string filename, vector<pair<string, vector<string>>> dataset)
 
 vector<pair<string, vector<string>>> read_csv(string filename)
 {
-    // Reads a CSV file into a vector of <string, vector<int>> pairs where
+    // Reads a CSV file into a vector of <string, vector<string>> pairs where
     // each pair represents <column name, column values>
 
     vector<pair<string, vector<string>>> result;
@@ -56,7 +55,7 @@ vector<pair<string, vector<string>>> read_csv(string filename)
         // Extract each column name
         while (getline(ss, colname, ','))
         {
-            // Initialize and add <colname, int vector> pairs to result
+            // Initialize and add <colname, string vector> pairs to result
             result.push_back({colname, vector<string>{}});
         }
 
@@ -82,7 +81,7 @@ vector<pair<string, vector<string>>> read_csv(string filename)
 vector<Point> createPath(vector<pair<string, vector<string>>> &csvData)
 {
     vector<Point> path;
-    for (unsigned int i = 0; i < csvData[1].second.size(); i++)
+    for (unsigned int i = 0; i < csvData[0].second.size(); i++)
     {
         path.push_back(Point(csvData[0].second[i], stof(csvData[1].second[i]), stof(csvData[2].second[i])));
     }

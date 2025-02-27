@@ -1,8 +1,7 @@
+#include <plotpaths.h>
 #include <matplotlibcpp17/pyplot.h>
-#include <sstream>
 #include <shortest_path_tsp.h>
 #include <point.h>
-#include <plotpaths.h>
 #include <vector>
 
 pybind11::scoped_interpreter guard{};
