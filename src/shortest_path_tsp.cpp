@@ -100,13 +100,13 @@ int main(int argc, char *argv[])
     // ArgParams args = setArgs();
     vector<Point> path = createPath(csvData);
 
-    int startElement = args.startElement;
-    int endElement = args.endElement;
+    int startIndex = args.startIndex;
+    int endIndex = args.endIndex;
     float improvementThreshold = args.improvementThreshold;
     printNodes(csvData, false);
     // set the index for start point and end point
-    setStartIndex(startElement, path);
-    setEndIndex(endElement, path);
+    setStartIndex(startIndex, path);
+    setEndIndex(endIndex, path);
 
     int n = path.size();
     vector<Point> newPath;

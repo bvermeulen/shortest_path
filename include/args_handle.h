@@ -12,8 +12,8 @@ using namespace std;
 
 struct ArgParams
 {
-	int startElement;
-	int endElement;
+	int startIndex;
+	int endIndex;
 	float improvementThreshold;
 };
 

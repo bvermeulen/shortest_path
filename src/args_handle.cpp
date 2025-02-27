@@ -41,6 +41,7 @@ float parseArgumentFloat(string token)
 int parseArgumentIndex(string token, vector<pair<string, vector<string>>> &csvData)
 {
 	int value;
+	int numberPoints = (int)csvData[0].second.size();
 	string firstLetter(1, token.front());
 	if ((token.find(".") != string::npos) & (firstLetter != "L"))
 	{
@@ -55,28 +56,35 @@ int parseArgumentIndex(string token, vector<pair<string, vector<string>>> &csvDa
 			printf("Index: %d must be greater than zero\n", value);
 			return -1;
 		}
-		if (value > (int)csvData.size())
+
+		if (value > numberPoints)
 		{
-			printf("Index %d must be less than %d\n", value, (int)csvData[0].second.size());
+			printf("Index %d must be less than %d\n", value, numberPoints);
 			return -1;
 		}
+		return value;
 	}
 	catch (...)
 	{
 		// token is not an integer
 		value = -1;
 	}
-	// check if token is a label, a label must start with 'L"
 
+	// check if token is a label, a label must start with 'L"
 	if (firstLetter == "L")
 	{
 		string label = token.substr(1, token.size());
-		for (int i = 0; i < (int)csvData[0].second.size(); i++)
+		for (int i = 0; i < numberPoints; i++)
 		{
 			if (label == csvData[0].second[i])
 			{
 				value = i;
+				break;
 			}
+		}
+		if (value == -1)
+		{
+			printf("Label %s does not exist\n", label.c_str());
 		}
 	}
 	else
@@ -89,19 +97,19 @@ int parseArgumentIndex(string token, vector<pair<string, vector<string>>> &csvDa
 void printArgs(ArgParams args)
 {
 	printf(
-		"start element: %d\n"
-		"end element: %d\n"
+		"start index: %d\n"
+		"end index: %d\n"
 		"threshold: %.4f\n",
-		args.startElement,
-		args.endElement,
+		args.startIndex,
+		args.endIndex,
 		args.improvementThreshold);
 }
 
 ArgParams setArgs()
 {
 	ArgParams args;
-	args.startElement = 0;
-	args.endElement = 0;
+	args.startIndex = 0;
+	args.endIndex = 0;
 	args.improvementThreshold = 0.001;
 	printArgs(args);
 	return args;
@@ -110,8 +118,8 @@ ArgParams setArgs()
 ArgParams parseArgs(int argc, char *argv[], vector<pair<string, vector<string>>> &csvData)
 {
 	ArgParams args;
-	args.startElement = -1;
-	args.endElement = -1;
+	args.startIndex = -1;
+	args.endIndex = -1;
 	args.improvementThreshold = defaultImprovementThreshold;
 	switch (argc)
 	{
@@ -122,53 +130,58 @@ ArgParams parseArgs(int argc, char *argv[], vector<pair<string, vector<string>>>
 	}
 	case 2: // only filename given
 	{
-		args.startElement = 0;
-		args.endElement = 0;
+		args.startIndex = 0;
+		args.endIndex = 0;
 		args.improvementThreshold = defaultImprovementThreshold;
 		break;
 	}
 	case 3: // filename and threshold given
 	{
-		args.startElement = 0;
-		args.endElement = 0;
+		args.startIndex = 0;
+		args.endIndex = 0;
 		args.improvementThreshold = parseArgumentFloat(argv[2]);
 		if (args.improvementThreshold < 0.0)
 		{
-			args.startElement = -1;
+			args.startIndex = -1;
 		}
 		break;
 	}
 	case 4: // filename, start and end element given
 	{
-		args.startElement = parseArgumentIndex(argv[2], csvData);
-		args.endElement = parseArgumentIndex(argv[3], csvData);
+		args.startIndex = parseArgumentIndex(argv[2], csvData);
+		args.endIndex = parseArgumentIndex(argv[3], csvData);
 		args.improvementThreshold = defaultImprovementThreshold;
-		if (args.endElement == -1)
+		if (args.endIndex == -1)
 		{
-			args.startElement = -1;
+			args.startIndex = -1;
 		}
 		break;
 	}
 	case 5: // filename, start, end  and threshold given
 	{
-		args.startElement = parseArgumentIndex(argv[2], csvData);
-		args.endElement = parseArgumentIndex(argv[3], csvData);
-		if (args.endElement == -1)
+		args.startIndex = parseArgumentIndex(argv[2], csvData);
+		args.endIndex = parseArgumentIndex(argv[3], csvData);
+		if (args.endIndex == -1)
 		{
-			args.startElement = -1;
+			args.startIndex = -1;
 		}
 		args.improvementThreshold = parseArgumentFloat(argv[4]);
 		if (args.improvementThreshold < 0.0)
 		{
-			args.startElement = -1;
+			args.startIndex = -1;
 		}
 		break;
 	}
 	}
 	printArgs(args);
-	if (args.startElement == -1)
+	if (args.startIndex == -1)
 	{
 		printf("Invalid parameters ...");
+		exit(-1);
+	}
+	if (args.startIndex == args.endIndex)
+	{
+		printf("Start and end index (%d) cannot be the same ...", args.startIndex);
 		exit(-1);
 	}
 	return args;
