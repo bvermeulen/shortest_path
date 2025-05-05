@@ -4,10 +4,14 @@
     Command line argument number:
         1 - file name of a csv file containing label, x, y of nodes (mandatory)
         2 - file name, threshold value (must be a value between 0 and 1) (optional)
+          - file name, print (bool true or false)
         3 - file name, start point, end point
                 if the start or end points are an integer they represent the index
                 if the start or end points start with "L", then it is the label
+          - file name, threshold, print
         4 - file name, start point, end point, threshold
+          - file name, start point, end point, print
+        5 - file name, start point, end point, threshold, print
 
         Default values: start point: index 0; end point: last index; threshold: 0.001
 
@@ -60,7 +64,7 @@ float calcDuration(const float distance, const float angle)
 }
 
 // Calculate the weighted path duration base on distance, angle and other delays
-float WeightedPathDuration(vector<Point> &path)
+float WeightedPathDuration(const vector<Point> &path)
 {
     Point p1, p2, p3;
     float totalDuration = 0.0;
@@ -104,7 +108,7 @@ int main(int argc, char *argv[])
     int startIndex = args.startIndex;
     int endIndex = args.endIndex;
     float improvementThreshold = args.improvementThreshold;
-    printNodes(csvData, false);
+    printNodes(csvData, args.printData);
     // set the index for start point and end point
     setStartIndex(startIndex, path);
     setEndIndex(endIndex, path);
@@ -149,7 +153,7 @@ int main(int argc, char *argv[])
     myPlt.Save();
     myPlt.Show();
     vector<pair<string, vector<string>>> csvOutData = createCsvData(path);
-    printNodes(csvOutData, false);
+    printNodes(csvOutData, args.printData);
     string const csvOutFile = csvFile.substr(0, csvFile.find_last_of(".csv") - 3) + "_solution.csv";
     write_csv(csvOutFile, csvOutData);
     return 0;

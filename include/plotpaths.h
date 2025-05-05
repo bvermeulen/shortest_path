@@ -12,7 +12,7 @@ private:
 
 public:
 	PlotPaths();
-	void plotFullPath(vector<Point> &path);
+	void plotFullPath(const vector<Point> &path);
 	void Blit(float pauseSeconds);
 	void Show();
 	void Save();

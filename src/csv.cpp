@@ -4,7 +4,7 @@
 
 using namespace std;
 
-void write_csv(string filename, vector<pair<string, vector<string>>> csvData)
+void write_csv(string filename, const vector<pair<string, vector<string>>> &csvData)
 {
     // Make a CSV file with one or more columns of integer values
 
@@ -78,7 +78,7 @@ vector<pair<string, vector<string>>> read_csv(string filename)
 }
 
 // Create a path based on csv data
-vector<Point> createPath(vector<pair<string, vector<string>>> &csvData)
+vector<Point> createPath(const vector<pair<string, vector<string>>> &csvData)
 {
     vector<Point> path;
     for (unsigned int i = 0; i < csvData[0].second.size(); i++)
@@ -89,7 +89,7 @@ vector<Point> createPath(vector<pair<string, vector<string>>> &csvData)
 }
 
 // Create csv data based on path and convert values to string with 1 decimal
-vector<pair<string, vector<string>>> createCsvData(vector<Point> &path)
+vector<pair<string, vector<string>>> createCsvData(const vector<Point> &path)
 {
     vector<string> id, x, y;
     ostringstream valStream;
@@ -108,7 +108,7 @@ vector<pair<string, vector<string>>> createCsvData(vector<Point> &path)
 }
 
 // Print the nodes
-void printNodes(vector<pair<string, vector<string>>> &csvData, bool printData)
+void printNodes(const vector<pair<string, vector<string>>> &csvData, bool printData)
 {
     string h1 = csvData[0].first;
     string h2 = csvData[1].first;

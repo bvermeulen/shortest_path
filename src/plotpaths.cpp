@@ -15,7 +15,7 @@ PlotPaths::PlotPaths()
 	this->counter = 0;
 }
 
-void PlotPaths::plotFullPath(vector<Point> &path)
+void PlotPaths::plotFullPath(const vector<Point> &path)
 {
 	float x0, x1, y0, y1;
 	ax.set_aspect(Args("equal"));

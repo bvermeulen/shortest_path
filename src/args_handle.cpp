@@ -6,6 +6,7 @@
 using namespace std;
 
 float defaultImprovementThreshold = 0.001;
+bool defaultPrintData = false;
 
 string getFileName(int argc, char *arg[])
 {
@@ -38,7 +39,7 @@ float parseArgumentFloat(string token)
 	return value;
 }
 
-int parseArgumentIndex(string token, vector<pair<string, vector<string>>> &csvData)
+int parseArgumentIndex(string token, const vector<pair<string, vector<string>>> &csvData)
 {
 	int value;
 	int numberPoints = (int)csvData[0].second.size();
@@ -99,10 +100,13 @@ void printArgs(ArgParams args)
 	printf(
 		"start index: %d\n"
 		"end index: %d\n"
-		"threshold: %.4f\n",
+		"threshold: %.4f\n"
+		"print: %s\n",
 		args.startIndex,
 		args.endIndex,
-		args.improvementThreshold);
+		args.improvementThreshold,
+		args.printData ? "yes" : "no" 
+	);
 }
 
 ArgParams setArgs()
@@ -110,71 +114,125 @@ ArgParams setArgs()
 	ArgParams args;
 	args.startIndex = 0;
 	args.endIndex = 0;
-	args.improvementThreshold = 0.001;
+	args.improvementThreshold = defaultImprovementThreshold;
+	args.printData = defaultPrintData;
 	printArgs(args);
 	return args;
 }
 
-ArgParams parseArgs(int argc, char *argv[], vector<pair<string, vector<string>>> &csvData)
+ArgParams parseArgs(int argc, char *argv[], const vector<pair<string, vector<string>>> &csvData)
 {
 	ArgParams args;
 	args.startIndex = -1;
 	args.endIndex = -1;
 	args.improvementThreshold = defaultImprovementThreshold;
+	args.printData = defaultPrintData;
 	int numberPoints = (int)csvData[0].second.size();
 
-	switch (argc)
-	{
-	case 1: // No input file
-	{
-		printf("No input file is given ...\n");
-		break;
-	}
-	case 2: // only filename given
-	{
-		args.startIndex = 0;
-		args.endIndex = numberPoints - 1;
-		args.improvementThreshold = defaultImprovementThreshold;
-		break;
-	}
-	case 3: // filename and threshold given
-	{
-		args.startIndex = 0;
-		args.endIndex = numberPoints - 1;
-		args.improvementThreshold = parseArgumentFloat(argv[2]);
-		if (args.improvementThreshold < 0.0)
-		{
-			args.startIndex = -1;
+	switch (argc) {
+		case 1: {
+			// No input file
+			printf("No input file is given ...\n");
+			break;
 		}
-		break;
-	}
-	case 4: // filename, start and end element given
-	{
-		args.startIndex = parseArgumentIndex(argv[2], csvData);
-		args.endIndex = parseArgumentIndex(argv[3], csvData);
-		args.improvementThreshold = defaultImprovementThreshold;
-		if (args.endIndex == -1)
-		{
-			args.startIndex = -1;
+		case 2: {
+			// only filename given
+			args.startIndex = 0;
+			args.endIndex = numberPoints - 1;
+			break;
 		}
-		break;
-	}
-	case 5: // filename, start, end  and threshold given
-	{
-		args.startIndex = parseArgumentIndex(argv[2], csvData);
-		args.endIndex = parseArgumentIndex(argv[3], csvData);
-		if (args.endIndex == -1)
-		{
-			args.startIndex = -1;
+		case 3:{
+			// filename, threshold or
+			// filename, print given
+			args.startIndex = 0;
+			args.endIndex = numberPoints - 1;
+			if ((argv[2] == string("true")) | (argv[2] == string("false")))
+			{
+				if (argv[2] == string("true"))
+					args.printData = true;
+				break;
+			}
+			args.improvementThreshold = parseArgumentFloat(argv[2]);
+			if (args.improvementThreshold < 0.0)
+			{
+				args.startIndex = -1;
+			}
+			break;
 		}
-		args.improvementThreshold = parseArgumentFloat(argv[4]);
-		if (args.improvementThreshold < 0.0)
-		{
-			args.startIndex = -1;
+		case 4: {
+			// filename, start, end element or
+			// filename, threshold, print
+			args.startIndex = 0;
+			args.endIndex = numberPoints - 1;
+			if ((argv[3] == string("true")) | (argv[3] == string("false")))
+			{
+				if (argv[3] == string("true"))
+					args.printData = true;
+
+				args.improvementThreshold = parseArgumentFloat(argv[2]);
+				if (args.improvementThreshold < 0.0)
+				{
+					args.startIndex = -1;
+				}
+				break;
+			}
+
+			args.startIndex = parseArgumentIndex(argv[2], csvData);
+			args.endIndex = parseArgumentIndex(argv[3], csvData);
+			args.improvementThreshold = defaultImprovementThreshold;
+			if (args.endIndex == -1)
+			{
+				args.startIndex = -1;
+			}
+			break;
 		}
-		break;
+		case 5: {
+			// filename, start, end, threshold or
+			// filename, start, end, print given
+			if ((argv[4] == string("true")) | (argv[4] == string("false")))
+			{
+				if (argv[4] == string("true"))
+					args.printData = true;
+			}
+			else 
+			{
+				args.improvementThreshold = parseArgumentFloat(argv[4]);
+				if (args.improvementThreshold < 0.0)
+				{
+					args.startIndex = -1;
+					break;
+				}
+			}
+			args.startIndex = parseArgumentIndex(argv[2], csvData);
+			args.endIndex = parseArgumentIndex(argv[3], csvData);
+			if (args.endIndex == -1)
+			{
+				args.startIndex = -1;
+			}
+			break;
+		}
+		case 6: {
+			// filename, start, end, threshold, print given
+			args.startIndex = parseArgumentIndex(argv[2], csvData);
+			args.endIndex = parseArgumentIndex(argv[3], csvData);
+			if (args.endIndex == -1)
+			{
+				args.startIndex = -1;
+			}
+			args.improvementThreshold = parseArgumentFloat(argv[4]);
+			if (args.improvementThreshold < 0.0)
+			{
+				args.startIndex = -1;
+			}
+			if ((argv[5] == string("true")) | (argv[5] == string("false")))
+			{
+				if (argv[5] == string("true"))
+					args.printData = true;
+			}
+			break;
+		}
 	}
-	}
+
 	printArgs(args);
 	if (args.startIndex == -1)
 	{
