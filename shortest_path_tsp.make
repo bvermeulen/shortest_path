@@ -1,3 +1,5 @@
+SHELL := powershell.exe 
+	.SHELLFLAGS := -NoProfile -Command  
 CC=g++
 PPYTHON = c:/users/bruno/appdata/local/programs/python/python313
 PMPL17 = c:/data/cpp/matplotlibcpp17
@@ -7,10 +9,12 @@ LIB = -L $(PPYTHON)/libs -lpython313
 CFLAGS=-Wall -g -fvisibility=hidden
 LFLAGS=-Wall
 CVERSION=c++17
-SDIR = .\src
-BUILD = .\build
+SDIR = ./src
+BUILD = ./build
 SRCFILE = shortest_path_tsp
-OBJDIR = .\objects
+OBJDIR = ./objects
+NAME_EXE = $(BUILD)/$(SRCFILE).exe
+NAME_OBJ = $(OBJDIR)/$(SRCFILE).o
 
 _OBJ = $(SRCFILE).o args_handle.o csv.o point.o plotpaths.o
 OBJ = $(patsubst %, $(OBJDIR)/%, $(_OBJ))
@@ -23,12 +27,12 @@ $(SRCFILE): $(OBJ)
 
 .PHONY: clean
 clean:
-	@echo Clean main app object file in $(OBJDIR) and executable in $(BUILD)
-	del $(BUILD)\$(SRCFILE).exe
-	del $(OBJDIR)\$(SRCFILE).o
+	@write-host "Clean $(SRCFILE) object file in $(OBJDIR) and executable in $(BUILD)"
+	@if (test-path $(NAME_OBJ)) { rm $(NAME_OBJ)} else {write-host "The file $(NAME_OBJ) does not exist"}
+	@if (test-path $(NAME_EXE)) { rm $(NAME_EXE)} else {write-host "The file $(NAME_EXE) does not exist"}
 
-.PHONY: clean_o
-clean_o:
-	@echo Clean all object files in $(OBJDIR) and executable in $(BUILD)
-	del $(OBJDIR)\*.o
-	del $(BUILD)\$(SRCFILE).exe
+.PHONY: clean_all
+clean_all:
+	@write-host "Clean all object files in $(OBJDIR) and $(SRCFILE).exe in $(BUILD)"
+	@rm $(OBJDIR)/*.o
+	@if (test-path $(NAME_EXE)) { rm $(NAME_EXE)} else {write-host "The file $(NAME_EXE) does not exist"}
