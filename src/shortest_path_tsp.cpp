@@ -1,16 +1,17 @@
 /*
     Program to calculate the shortest time to traverse a set of nodes, whereby going straight is the
     fastest option.
-    Command line arguments are:
+    Command line argument number:
         1 - file name of a csv file containing label, x, y of nodes (mandatory)
-        2 - if value between 0 and 1 it is the threshold, otherwise is the element in the list
-            where path must start (must be an integer >= 0) (optional)
-        3 - threshold (must be between 0 and 1) (optional)
-        4 - start and end points
+        2 - file name, threshold value (must be a value between 0 and 1) (optional)
+        3 - file name, start point, end point
+                if the start or end points are an integer they represent the index
+                if the start or end points start with "L", then it is the label
+        4 - file name, start point, end point, threshold
 
-    start element default value is 0, threshold default value is 0.001
+        Default values: start point: index 0; end point: last index; threshold: 0.001
 
-    @2024 howdiweb, bruno.vermeulen@hotmail.com
+    @2025 howdiweb, bruno.vermeulen@hotmail.com
 */
 #include <algorithm> // for reverse mapping
 #include <math.h>
