@@ -1,5 +1,5 @@
 /*
-Class definition of Point
+Class definition of Point - array version
 */
 #include <point.h>
 #include <math.h>

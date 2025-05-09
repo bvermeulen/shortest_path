@@ -1,4 +1,5 @@
 /*
+	shortest path - array version
 	General used constants
 */
 #ifndef SHORTESTPATH

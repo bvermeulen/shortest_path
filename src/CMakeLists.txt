@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(shortest_path)
+project(shortest_path_array)
 enable_language(C CXX)
 
 set(sources
@@ -20,10 +20,10 @@ include_directories(
     c:/data/cpp/pybind11/include
 )
 
-add_executable(shortest_path ${sources} ${includes})
-target_include_directories(shortest_path PUBLIC ${Python3_INCLUDE_DIRS})
+add_executable(shortest_path_array ${sources} ${includes})
+target_include_directories(shortest_path_array PUBLIC ${Python3_INCLUDE_DIRS})
 
-target_link_libraries(shortest_path ${Python3_LIBRARIES})
+target_link_libraries(shortest_path_array ${Python3_LIBRARIES})
 
-set_target_properties(shortest_path PROPERTIES LDFLAGS "-Wall")
-set_target_properties(shortest_path PROPERTIES COMPILE_FLAGS "-Wall -g -fvisibility=hidden")
+set_target_properties(shortest_path_array PROPERTIES LDFLAGS "-Wall")
+set_target_properties(shortest_path_array PROPERTIES COMPILE_FLAGS "-Wall -g -fvisibility=hidden")

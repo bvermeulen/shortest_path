@@ -1,4 +1,5 @@
 /*
+shortest path - array version
 header for point.cpp
 */
 #ifndef POINT_H
