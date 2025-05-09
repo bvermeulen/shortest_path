@@ -4,28 +4,70 @@
 
 using namespace std;
 
-void write_csv(string filename, const vector<pair<string, vector<string>>> &csvData)
+void initCsvData(Column *csvData)
+{
+    for (int i = 0; i < numberCols - 1; i++)
+    {
+        csvData[i].colName = "@";
+    }
+
+    for (int i = 0; i < numberCols - 1; i++)
+    {
+        for (int j = 0; j < numberRows; j++)
+        {
+            csvData[i].colValues[j] = "@";
+        }
+    }
+}
+
+int getRows(const Column *csvData)
+{
+    int numRows = 0;
+    for (int i = 0; i < numberRows; i++)
+    {
+        if (csvData[0].colValues[i] == "@")
+            break;
+        numRows++;
+    }
+    return numRows;
+}
+
+int getCols(const Column *csvData)
+{
+    int numCols = 0;
+    for (int i = 0; i < numberCols; i++)
+    {
+        if (csvData[i].colName == "@")
+            break;
+        numCols++;
+    }
+    return numCols;
+}
+
+void write_csv(string filename, const Column *csvData)
 {
     // Make a CSV file with one or more columns of integer values
 
-    ofstream myFile(filename);
+    int numRows = getRows(csvData);
+    int numCols = getCols(csvData);
 
+    ofstream myFile(filename);
     // Send column names to the stream
-    for (unsigned int i = 0; i < csvData.size(); ++i)
+    for (int i = 0; i < numCols; ++i)
     {
-        myFile << csvData[i].first;
-        if (i != csvData.size() - 1)
+        myFile << csvData[i].colName;
+        if (i != numCols - 1)
             myFile << ",";
     }
     myFile << "\n";
 
     // Send data to the stream
-    for (unsigned int i = 0; i < csvData[0].second.size(); ++i)
+    for (int i = 0; i < numCols; ++i)
     {
-        for (unsigned int j = 0; j < csvData.size(); ++j)
+        for (int j = 0; j < numRows; ++j)
         {
-            myFile << csvData[j].second[i];
-            if (j != csvData.size() - 1)
+            myFile << csvData[i].colValues[j];
+            if (j != numberRows - 1)
                 myFile << ",";
         }
         myFile << "\n";
@@ -33,93 +75,113 @@ void write_csv(string filename, const vector<pair<string, vector<string>>> &csvD
     myFile.close();
 }
 
-vector<pair<string, vector<string>>> read_csv(string filename)
+Column *read_csv(string filename)
 {
     // Reads a CSV file into a vector of <string, vector<string>> pairs where
     // each pair represents <column name, column values>
-
-    vector<pair<string, vector<string>>> result;
+    Column *csvData;
+    csvData = new Column[numberCols];
+    initCsvData(csvData);
     ifstream myFile(filename);
     if (!myFile)
     {
         printf("File %s: ", filename.c_str());
         throw runtime_error("File does not exist ...");
     }
-    string line, colname;
-    string val, token;
+    string line, colName;
+    string val, colValue;
     if (myFile.good())
     {
         getline(myFile, line);
         stringstream ss(line);
 
-        // Extract each column name
-        while (getline(ss, colname, ','))
+        int colIdx = 0;
+        while (getline(ss, colName, ','))
         {
-            // Initialize and add <colname, string vector> pairs to result
-            result.push_back({colname, vector<string>{}});
+            csvData[colIdx].colName = colName;
+            colIdx++;
         }
 
-        // Read data, line by line
+        int rowIdx = 0;
         while (getline(myFile, line))
         {
             stringstream ss(line);
-            int colIdx = 0;
-            while (getline(ss, token, ','))
+            colIdx = 0;
+            while (getline(ss, colValue, ','))
             {
-                // Add the current integer to the colIdx columns values vector
-                result[colIdx].second.push_back(token);
-                // if (ss.peek() == ',') ss.ignore();
+                // add the values for the columns for this line
+                csvData[colIdx].colValues[rowIdx] = colValue;
                 colIdx++;
             }
+            rowIdx++;
         }
     }
     myFile.close();
-    return result;
+    return csvData;
 }
 
 // Create a path based on csv data
-vector<Point> createPath(const vector<pair<string, vector<string>>> &csvData)
+Point* createPath(const Column *csvData)
 {
-    vector<Point> path;
-    for (unsigned int i = 0; i < csvData[0].second.size(); i++)
+    int numRows = getRows(csvData);
+    Point* path;
+    path = new Point[numRows];
+
+    for (int i = 0; i < numRows; i++)
     {
-        path.push_back(Point(csvData[0].second[i], stof(csvData[1].second[i]), stof(csvData[2].second[i])));
+        path[i] = Point(
+            csvData[0].colValues[i],
+            stof(csvData[1].colValues[i]),
+            stof(csvData[2].colValues[i]));
     }
     return path;
 }
 
 // Create csv data based on path and convert values to string with 1 decimal
-vector<pair<string, vector<string>>> createCsvData(const vector<Point> &path)
+Column *createCsvData(const Point* path, int lenPath)
 {
-    vector<string> id, x, y;
     ostringstream valStream;
-    for (unsigned int i = 0; i < path.size(); i++)
+    Column *csvData;
+    csvData = new Column[numberCols];
+    initCsvData(csvData);
+
+    csvData[0].colName = "label";
+    csvData[1].colName = "easting";
+    csvData[2].colName = "northing";
+
+    for (int i = 0; i < lenPath; i++)
     {
-        id.push_back(path[i].id);
+        csvData[0].colValues[i] = path[i].id;
+
         valStream.str("");
         valStream << fixed << setprecision(1) << path[i].x;
-        x.push_back(valStream.str());
+        csvData[1].colValues[i] = valStream.str();
+
         valStream.str("");
         valStream << fixed << setprecision(1) << path[i].y;
-        y.push_back(valStream.str());
+        csvData[2].colValues[i] = valStream.str();
     }
-    vector<pair<string, vector<string>>> csvData{{"label", id}, {"easting", x}, {"northing", y}};
     return csvData;
 }
 
 // Print the nodes
-void printNodes(const vector<pair<string, vector<string>>> &csvData, bool printData)
+void printNodes(const Column *csvData, bool printData)
 {
-    string h1 = csvData[0].first;
-    string h2 = csvData[1].first;
-    string h3 = csvData[2].first;
-    printf("number of nodes: %3llu\n", csvData[0].second.size());
+    int numRows = getRows(csvData);
+
     if (!printData)
         return;
-    for (unsigned int i = 0; i < csvData[0].second.size(); i++)
+
+    printf("%10s, %10s, %10s\n",
+           csvData[0].colName.c_str(),
+           csvData[1].colName.c_str(),
+           csvData[2].colName.c_str());
+
+    for (int i = 0; i < numRows; i++)
     {
-        printf("%s: %s, %s: %.1f, %s: %.1f\n",
-               h1.c_str(), csvData[0].second[i].c_str(), h2.c_str(),
-               stof(csvData[1].second[i]), h3.c_str(), stof(csvData[2].second[i]));
+        printf("%10s, %10.1f, %10.1f\n",
+               csvData[0].colValues[i].c_str(),
+               stof(csvData[1].colValues[i]),
+               stof(csvData[2].colValues[i]));
     }
 }

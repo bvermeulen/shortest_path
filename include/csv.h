@@ -1,15 +1,25 @@
 #ifndef CSV_H
 #define CSV_H
 
-#include <vector>
 #include <point.h>
 
 using namespace std;
 
-void write_csv(string filename, const vector<pair<string, vector<string>>> &csvData);
-vector<pair<string, vector<string>>> read_csv(string filename);
-vector<Point> createPath(const vector<pair<string, vector<string>>> &csvData);
-vector<pair<string, vector<string>>> createCsvData(const vector<Point> &path);
-void printNodes(const vector<pair<string, vector<string>>> &csvData, bool printData);
+const int numberCols = 3;
+const int numberRows = 2000;
+
+struct Column
+{
+    string colName;
+    string colValues[numberRows];
+};
+
+int getRows(const Column *csvData);
+int getCols(const Column *csvData);
+void write_csv(string filename, const Column *csvData);
+Column *read_csv(string filename);
+Point* createPath(const Column *csvData);
+Column* createCsvData(const Point* path, int lenPath);
+void printNodes(const Column *csvData, bool printData);
 
 #endif // CSV_H

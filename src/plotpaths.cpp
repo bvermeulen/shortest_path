@@ -2,7 +2,6 @@
 #include <matplotlibcpp17/pyplot.h>
 #include <shortest_path_tsp.h>
 #include <point.h>
-#include <vector>
 
 pybind11::scoped_interpreter guard{};
 pybind11::module site = pybind11::module::import("site");
@@ -15,11 +14,11 @@ PlotPaths::PlotPaths()
 	this->counter = 0;
 }
 
-void PlotPaths::plotFullPath(const vector<Point> &path)
+void PlotPaths::plotFullPath(const Point* path, int nPoints)
 {
 	float x0, x1, y0, y1;
 	ax.set_aspect(Args("equal"));
-	for (unsigned int i = 0; i < path.size() - 1; i++)
+	for (int i = 0; i < nPoints - 1; i++)
 	{
 		x0 = path[i].x;
 		y0 = path[i].y;

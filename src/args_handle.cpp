@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 #include <args_handle.h>
-#include <vector>
 #include <point.h>
+#include <csv.h>
 
 using namespace std;
 
@@ -19,7 +19,7 @@ string getFileName(int argc, char *arg[])
 	return arg[1];
 }
 
-float parseArgumentFloat(string token)
+float parseArgumentThreshold(string token)
 {
 	float value;
 	try
@@ -39,10 +39,10 @@ float parseArgumentFloat(string token)
 	return value;
 }
 
-int parseArgumentIndex(string token, const vector<pair<string, vector<string>>> &csvData)
+int parseArgumentIndex(string token, const Column *csvData, int nPoints)
 {
 	int value;
-	int numberPoints = (int)csvData[0].second.size();
+
 	string firstLetter(1, token.front());
 	if ((token.find(".") != string::npos) & (firstLetter != "L"))
 	{
@@ -58,9 +58,9 @@ int parseArgumentIndex(string token, const vector<pair<string, vector<string>>> 
 			return -1;
 		}
 
-		if (value > numberPoints - 1)
+		if (value > nPoints - 1)
 		{
-			printf("Index %d must be less than %d\n", value, numberPoints);
+			printf("Index %d must be less than %d\n", value, nPoints);
 			return -1;
 		}
 		return value;
@@ -75,9 +75,9 @@ int parseArgumentIndex(string token, const vector<pair<string, vector<string>>> 
 	if (firstLetter == "L")
 	{
 		string label = token.substr(1, token.size());
-		for (int i = 0; i < numberPoints; i++)
+		for (int i = 0; i < nPoints; i++)
 		{
-			if (label == csvData[0].second[i])
+			if (label == csvData[0].colValues[i])
 			{
 				value = i;
 				break;
@@ -100,137 +100,135 @@ void printArgs(ArgParams args)
 	printf(
 		"start index: %d\n"
 		"end index: %d\n"
+		"number points: %d\n"
 		"threshold: %.4f\n"
 		"print: %s\n",
 		args.startIndex,
 		args.endIndex,
+		args.nPoints,
 		args.improvementThreshold,
-		args.printData ? "yes" : "no" 
-	);
+		args.printData ? "yes" : "no");
 }
 
-ArgParams setArgs()
-{
-	ArgParams args;
-	args.startIndex = 0;
-	args.endIndex = 0;
-	args.improvementThreshold = defaultImprovementThreshold;
-	args.printData = defaultPrintData;
-	printArgs(args);
-	return args;
-}
-
-ArgParams parseArgs(int argc, char *argv[], const vector<pair<string, vector<string>>> &csvData)
+ArgParams parseArgs(int argc, char *argv[], const Column *csvData)
 {
 	ArgParams args;
 	args.startIndex = -1;
 	args.endIndex = -1;
 	args.improvementThreshold = defaultImprovementThreshold;
 	args.printData = defaultPrintData;
-	int numberPoints = (int)csvData[0].second.size();
+	int nPoints = getRows(csvData);
+	args.nPoints = nPoints;
 
-	switch (argc) {
-		case 1: {
-			// No input file
-			printf("No input file is given ...\n");
+	switch (argc)
+	{
+	case 1:
+	{
+		// No input file
+		printf("No input file is given ...\n");
+		break;
+	}
+	case 2:
+	{
+		// only filename given
+		args.startIndex = 0;
+		args.endIndex = nPoints - 1;
+		break;
+	}
+	case 3:
+	{
+		// filename, threshold or
+		// filename, print given
+		args.startIndex = 0;
+		args.endIndex = nPoints - 1;
+		if ((argv[2] == string("true")) | (argv[2] == string("false")))
+		{
+			if (argv[2] == string("true"))
+				args.printData = true;
 			break;
 		}
-		case 2: {
-			// only filename given
-			args.startIndex = 0;
-			args.endIndex = numberPoints - 1;
-			break;
+		args.improvementThreshold = parseArgumentThreshold(argv[2]);
+		if (args.improvementThreshold < 0.0)
+		{
+			args.startIndex = -1;
 		}
-		case 3:{
-			// filename, threshold or
-			// filename, print given
-			args.startIndex = 0;
-			args.endIndex = numberPoints - 1;
-			if ((argv[2] == string("true")) | (argv[2] == string("false")))
-			{
-				if (argv[2] == string("true"))
-					args.printData = true;
-				break;
-			}
-			args.improvementThreshold = parseArgumentFloat(argv[2]);
+		break;
+	}
+	case 4:
+	{
+		// filename, start, end element or
+		// filename, threshold, print
+		args.startIndex = 0;
+		args.endIndex = nPoints - 1;
+		if ((argv[3] == string("true")) | (argv[3] == string("false")))
+		{
+			if (argv[3] == string("true"))
+				args.printData = true;
+
+			args.improvementThreshold = parseArgumentThreshold(argv[2]);
 			if (args.improvementThreshold < 0.0)
 			{
 				args.startIndex = -1;
 			}
 			break;
 		}
-		case 4: {
-			// filename, start, end element or
-			// filename, threshold, print
-			args.startIndex = 0;
-			args.endIndex = numberPoints - 1;
-			if ((argv[3] == string("true")) | (argv[3] == string("false")))
-			{
-				if (argv[3] == string("true"))
-					args.printData = true;
 
-				args.improvementThreshold = parseArgumentFloat(argv[2]);
-				if (args.improvementThreshold < 0.0)
-				{
-					args.startIndex = -1;
-				}
-				break;
-			}
-
-			args.startIndex = parseArgumentIndex(argv[2], csvData);
-			args.endIndex = parseArgumentIndex(argv[3], csvData);
-			args.improvementThreshold = defaultImprovementThreshold;
-			if (args.endIndex == -1)
-			{
-				args.startIndex = -1;
-			}
-			break;
+		args.startIndex = parseArgumentIndex(argv[2], csvData, nPoints);
+		args.endIndex = parseArgumentIndex(argv[3], csvData, nPoints);
+		args.improvementThreshold = defaultImprovementThreshold;
+		if (args.endIndex == -1)
+		{
+			args.startIndex = -1;
 		}
-		case 5: {
-			// filename, start, end, threshold or
-			// filename, start, end, print given
-			if ((argv[4] == string("true")) | (argv[4] == string("false")))
-			{
-				if (argv[4] == string("true"))
-					args.printData = true;
-			}
-			else 
-			{
-				args.improvementThreshold = parseArgumentFloat(argv[4]);
-				if (args.improvementThreshold < 0.0)
-				{
-					args.startIndex = -1;
-					break;
-				}
-			}
-			args.startIndex = parseArgumentIndex(argv[2], csvData);
-			args.endIndex = parseArgumentIndex(argv[3], csvData);
-			if (args.endIndex == -1)
-			{
-				args.startIndex = -1;
-			}
-			break;
+		break;
+	}
+	case 5:
+	{
+		// filename, start, end, threshold or
+		// filename, start, end, print given
+		if ((argv[4] == string("true")) | (argv[4] == string("false")))
+		{
+			if (argv[4] == string("true"))
+				args.printData = true;
 		}
-		case 6: {
-			// filename, start, end, threshold, print given
-			args.startIndex = parseArgumentIndex(argv[2], csvData);
-			args.endIndex = parseArgumentIndex(argv[3], csvData);
-			if (args.endIndex == -1)
-			{
-				args.startIndex = -1;
-			}
-			args.improvementThreshold = parseArgumentFloat(argv[4]);
+		else
+		{
+			args.improvementThreshold = parseArgumentThreshold(argv[4]);
 			if (args.improvementThreshold < 0.0)
 			{
 				args.startIndex = -1;
+				break;
 			}
-			if ((argv[5] == string("true")) | (argv[5] == string("false")))
-			{
-				if (argv[5] == string("true"))
-					args.printData = true;
-			}
-			break;
 		}
+		args.startIndex = parseArgumentIndex(argv[2], csvData, nPoints);
+		args.endIndex = parseArgumentIndex(argv[3], csvData, nPoints);
+		if (args.endIndex == -1)
+		{
+			args.startIndex = -1;
+		}
+		break;
+	}
+	case 6:
+	{
+		// filename, start, end, threshold, print given
+		args.startIndex = parseArgumentIndex(argv[2], csvData, nPoints);
+		args.endIndex = parseArgumentIndex(argv[3], csvData, nPoints);
+		if (args.endIndex == -1)
+		{
+			args.startIndex = -1;
+		}
+		args.improvementThreshold = parseArgumentThreshold(argv[4]);
+		if (args.improvementThreshold < 0.0)
+		{
+			args.startIndex = -1;
+		}
+		if ((argv[5] == string("true")) | (argv[5] == string("false")))
+		{
+			if (argv[5] == string("true"))
+				args.printData = true;
+		}
+		break;
+	}
 	}
 
 	printArgs(args);
@@ -248,23 +246,23 @@ ArgParams parseArgs(int argc, char *argv[], const vector<pair<string, vector<str
 }
 
 // set index to the front of the path (start point)
-void setStartIndex(int index, vector<Point> &path)
+void setStartIndex(int index, Point* path)
 {
 	if (index == 0)
 		return;
 	Point tmpPoint;
-	tmpPoint = path.front();
-	path.front() = path[index];
+	tmpPoint = path[0];
+	path[0] = path[index];
 	path[index] = tmpPoint;
 }
 
 // set index to the back of the path (end point)
-void setEndIndex(int index, vector<Point> &path)
+void setEndIndex(int index, Point* path, int lastPoint)
 {
 	if (index == 0)
 		return;
 	Point tmpPoint;
-	tmpPoint = path.back();
-	path.back() = path[index];
+	tmpPoint = path[lastPoint - 1];
+	path[lastPoint-1] = path[index];
 	path[index] = tmpPoint;
 }

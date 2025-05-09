@@ -17,9 +17,9 @@
 
     @2025 howdiweb, bruno.vermeulen@hotmail.com
 */
-#include <algorithm> // for reverse mapping
+#include <algorithm>
+#include <assert.h>
 #include <math.h>
-#include <vector>
 #include <shortest_path_tsp.h>
 #include <args_handle.h>
 #include <csv.h>
@@ -64,12 +64,12 @@ float calcDuration(const float distance, const float angle)
 }
 
 // Calculate the weighted path duration base on distance, angle and other delays
-float WeightedPathDuration(const vector<Point> &path)
+float WeightedPathDuration(const Point *path, int nPoints)
 {
     Point p1, p2, p3;
     float totalDuration = 0.0;
     float angle, distance, duration;
-    for (unsigned int i = 0; i < path.size() - 2; i++)
+    for (int i = 0; i < nPoints - 2; i++)
     {
         p1 = path[i];
         p2 = path[(i + 1)];
@@ -91,36 +91,44 @@ float WeightedPathDuration(const vector<Point> &path)
 }
 
 // Perform a 2-opt swap
-void do2Opt(vector<Point> &path, int i, int j)
+void do2Opt(Point *path, int r1, int r2)
 {
-    reverse(begin(path) + i + 1, begin(path) + j + 1);
+    assert(r2 > r1);
+    Point tmpPoint;
+    for (int i = 0; i < (r2 - r1) / 2; i++) 
+    {
+        tmpPoint = path[r1 + i + 1];
+        path[r1 + i + 1] = path[r2 - i];
+        path[r2 - i] = tmpPoint;
+    }
 }
 
 int main(int argc, char *argv[])
 {
     PlotPaths myPlt;
     string csvFile = getFileName(argc, argv);
-    vector<pair<string, vector<string>>> csvData = read_csv(csvFile);
+    Column *csvData = read_csv(csvFile);
     ArgParams args = parseArgs(argc, argv, csvData);
     // ArgParams args = setArgs();
-    vector<Point> path = createPath(csvData);
+    Point *path = createPath(csvData);
 
     int startIndex = args.startIndex;
     int endIndex = args.endIndex;
     float improvementThreshold = args.improvementThreshold;
     printNodes(csvData, args.printData);
     // set the index for start point and end point
+    int n = args.nPoints;
     setStartIndex(startIndex, path);
-    setEndIndex(endIndex, path);
+    setEndIndex(endIndex, path, n);
 
-    int n = path.size();
-    vector<Point> newPath;
-    float bestDistance = WeightedPathDuration(path);
+    Point *newPath;
+    newPath = new Point[n];
+    float bestDistance = WeightedPathDuration(path, n);
     float newDistance, distanceToBeat;
     float improvementFactor = 1.0;
 
     printf("\nbest distance: %.0f, improvement factor: %.6f", bestDistance, improvementFactor);
-    myPlt.plotFullPath(path);
+    myPlt.plotFullPath(path, n);
     myPlt.Save();
     myPlt.Blit(2);
 
@@ -132,27 +140,27 @@ int main(int argc, char *argv[])
         {
             for (int j = i + 1; j < n - 1; j++)
             {
-                newPath = path;
+                copy(path, path + n, newPath);
                 do2Opt(newPath, i, j);
-                newDistance = WeightedPathDuration(newPath);
+                newDistance = WeightedPathDuration(newPath, n);
                 if (newDistance < bestDistance)
                 {
-                    path = newPath;
+                    copy(newPath, newPath + n, path);
                     bestDistance = newDistance;
                 }
             }
         }
         improvementFactor = 1.0 - bestDistance / distanceToBeat;
         printf("\nbest distance: %.0f, improvement factor: %.6f", bestDistance, improvementFactor);
-        myPlt.plotFullPath(path);
+        myPlt.plotFullPath(path, n);
         myPlt.Save();
         myPlt.Blit(2);
     }
     printf("\n\n");
-    myPlt.plotFullPath(path);
+    myPlt.plotFullPath(path, n);
     myPlt.Save();
     myPlt.Show();
-    vector<pair<string, vector<string>>> csvOutData = createCsvData(path);
+    Column *csvOutData = createCsvData(path, n);
     printNodes(csvOutData, args.printData);
     string const csvOutFile = csvFile.substr(0, csvFile.find_last_of(".csv") - 3) + "_solution.csv";
     write_csv(csvOutFile, csvOutData);

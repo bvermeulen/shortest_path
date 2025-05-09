@@ -2,7 +2,6 @@
 #define PLOTPATHS
 
 #include "point.h"
-#include <vector>
 
 
 class PlotPaths
@@ -12,10 +11,9 @@ private:
 
 public:
 	PlotPaths();
-	void plotFullPath(const vector<Point> &path);
+	void plotFullPath(const Point* path, int nPoints);
 	void Blit(float pauseSeconds);
 	void Show();
 	void Save();
 };
-
 #endif // PLOTPATHS
