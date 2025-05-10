@@ -91,7 +91,7 @@ float WeightedPathDuration(const Point *path, int nPoints)
 }
 
 // Perform a 2-opt swap
-void do2Opt(Point *path, int r1, int r2)
+void do2Opt_1(Point *path, int r1, int r2)
 {
     assert(r2 > r1);
     Point tmpPoint;
@@ -101,6 +101,11 @@ void do2Opt(Point *path, int r1, int r2)
         path[r1 + i + 1] = path[r2 - i];
         path[r2 - i] = tmpPoint;
     }
+}
+
+void do2Opt(Point *path, int r1, int r2)
+{
+    reverse(path + r1 + 1, path + r2 + 1);
 }
 
 int main(int argc, char *argv[])
