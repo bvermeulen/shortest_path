@@ -127,11 +127,10 @@ void Csv::read_csv(string filename)
 }
 
 // Create a path based on csv data
-Point *Csv::createPath()
+Point* Csv::createPath()
 {
     int numRows = getRows();
-    Point *path;
-    path = new Point[numRows];
+    Point* path = new Point[numRows];
 
     for (int i = 0; i < numRows; i++)
     {

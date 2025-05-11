@@ -69,23 +69,22 @@ float WeightedPathDuration(const Point *path, int nPoints)
     Point p1, p2, p3;
     float totalDuration = 0.0;
     float angle, distance, duration;
-    for (int i = 0; i < nPoints - 2; i++)
+    for (int i = 0; i < nPoints - 1; i++)
     {
-        p1 = path[i];
-        p2 = path[(i + 1)];
-        p3 = path[(i + 2)];
+        p2 = path[(i)];
+        p3 = path[(i + 1)];
         if (i == 0)
         {
-            distance = p1.dist(p2);
-            duration = calcDuration(distance, 0.0);
-            totalDuration += duration;
-            // printf("i: %d, angle: %.1f, duration: %.1f, duration: %.1f\n", i, angle, distance, duration);
+            angle = 0.0;
         }
-        angle = angle3points(p1, p2, p3);
+        else
+        {
+            p1 = path[i - 1];
+            angle = angle3points(p1, p2, p3);
+        }
         distance = p2.dist(p3);
         duration = calcDuration(distance, angle);
         totalDuration += duration;
-        // printf("i: %d, angle: %.1f, distance: %.1f, duration: %.1f, total: %.0f\n", i, angle, distance, duration, totalDuration);
     }
     return totalDuration;
 }
