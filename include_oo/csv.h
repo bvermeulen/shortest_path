@@ -14,22 +14,23 @@ struct Column
     string colValues[numberRows];
 };
 
-class Csv {
-    
-    public:
-        Column *csvData;
-        Csv();
-        int getRows();
-        int getCols();
-        void write_csv(string filename);
-        void read_csv(string filename);
-        Point* createPath();
-        void createCsvData(const Point* path, int lenPath);
-        void printNodes(bool printData);
-        Column* getCsvData();
+class Csv
+{
 
-    private:
-        void initCsvData();
+public:
+    Csv();
+    int getRows();
+    int getCols();
+    void write_csv(string filename);
+    void read_csv(string filename);
+    Point *createPath();
+    void createCsvData(const Point *path, int lenPath);
+    void printNodes(bool printData);
+    Column *getCsvData();
+
+private:
+    Column *csvData;
+    void initCsvData();
 };
 
 #endif // CSV_H

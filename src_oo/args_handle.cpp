@@ -119,7 +119,7 @@ ArgParams parseArgs(int argc, char *argv[], Csv csv)
 	args.printData = defaultPrintData;
 	int nPoints = csv.getRows();
 	args.nPoints = nPoints;
-	Column* csvData = csv.csvData;
+	Column* csvData = csv.getCsvData();
 
 	switch (argc)
 	{
@@ -174,8 +174,8 @@ ArgParams parseArgs(int argc, char *argv[], Csv csv)
 			break;
 		}
 
-		args.startIndex = parseArgumentIndex(argv[2], csv.csvData, nPoints);
-		args.endIndex = parseArgumentIndex(argv[3], csv.csvData, nPoints);
+		args.startIndex = parseArgumentIndex(argv[2], csvData, nPoints);
+		args.endIndex = parseArgumentIndex(argv[3], csvData, nPoints);
 		args.improvementThreshold = defaultImprovementThreshold;
 		if (args.endIndex == -1)
 		{
