@@ -24,11 +24,6 @@ void Csv::initCsvData()
     }
 }
 
-Column* Csv::getCsvData() 
-{
-    return csvData;
-}
-
 int Csv::getRows()
 {
     int numRows = 0;
@@ -51,6 +46,19 @@ int Csv::getCols()
         numCols++;
     }
     return numCols;
+}
+
+int Csv::getLabelIndex(string label)
+{
+    int nPoints = getRows();
+    for (int i = 0; i < nPoints; i++)
+    {
+        if (label == csvData[0].colValues[i])
+        {
+            return i;
+        }
+    }
+    return -1;
 }
 
 void Csv::write_csv(string filename)
@@ -127,10 +135,9 @@ void Csv::read_csv(string filename)
 }
 
 // Create a path based on csv data
-Point* Csv::createPath()
+void Csv::fillPath(Point *path)
 {
     int numRows = getRows();
-    Point* path = new Point[numRows];
 
     for (int i = 0; i < numRows; i++)
     {
@@ -139,7 +146,6 @@ Point* Csv::createPath()
             stof(csvData[1].colValues[i]),
             stof(csvData[2].colValues[i]));
     }
-    return path;
 }
 
 // Create csv data based on path and convert values to string with 1 decimal

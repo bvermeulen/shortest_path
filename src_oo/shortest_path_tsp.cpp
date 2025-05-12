@@ -115,19 +115,20 @@ int main(int argc, char *argv[])
     csv.read_csv(csvFile);
     ArgParams args = parseArgs(argc, argv, csv);
     // ArgParams args = setArgs();
-    Point *path = csv.createPath();
+    int n = args.nPoints;
+    Point path[n];
+    csv.fillPath(path);
 
     int startIndex = args.startIndex;
     int endIndex = args.endIndex;
     float improvementThreshold = args.improvementThreshold;
     csv.printNodes(args.printData);
     // set the index for start point and end point
-    int n = args.nPoints;
     setStartIndex(startIndex, path);
     setEndIndex(endIndex, path, n);
 
-    Point *newPath;
-    newPath = new Point[n];
+    // Point* newPath = new Point[n];
+    Point newPath[n];
     float bestDistance = WeightedPathDuration(path, n);
     float newDistance, distanceToBeat;
     float improvementFactor = 1.0;

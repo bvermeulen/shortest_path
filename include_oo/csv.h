@@ -5,32 +5,31 @@
 
 using namespace std;
 
-const int numberCols = 3;
-const int numberRows = 2000;
-
-struct Column
-{
-    string colName;
-    string colValues[numberRows];
-};
-
 class Csv
 {
 
-public:
-    Csv();
-    int getRows();
-    int getCols();
-    void write_csv(string filename);
-    void read_csv(string filename);
-    Point *createPath();
-    void createCsvData(const Point *path, int lenPath);
-    void printNodes(bool printData);
-    Column *getCsvData();
+    private:
+        static const int numberCols = 3;
+        static const int numberRows = 2000;
+    
+        struct Column
+        {
+            string colName;
+            string colValues[numberRows];
+        };
+        Column *csvData;
+        void initCsvData();
 
-private:
-    Column *csvData;
-    void initCsvData();
+    public:
+        Csv();
+        int getRows();
+        int getCols();
+        void write_csv(string filename);
+        void read_csv(string filename);
+        int getLabelIndex(string label);
+        void fillPath(Point *path);
+        void createCsvData(const Point *path, int lenPath);
+        void printNodes(bool printData);
 };
 
 #endif // CSV_H

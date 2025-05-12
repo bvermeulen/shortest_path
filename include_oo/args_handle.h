@@ -20,7 +20,6 @@ struct ArgParams
 };
 
 string getFileName(int argc, char *argv[]);
-ArgParams setArgs();
 ArgParams parseArgs(int argc, char *argv[], Csv csv);
 void setStartIndex(int index, Point* path);
 void setEndIndex(int index, Point* path, int lenPath);

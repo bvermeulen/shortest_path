@@ -39,7 +39,7 @@ float parseArgumentThreshold(string token)
 	return value;
 }
 
-int parseArgumentIndex(string token, const Column *csvData, int nPoints)
+int parseArgumentIndex(string token, Csv csv, int nPoints)
 {
 	int value;
 
@@ -75,14 +75,7 @@ int parseArgumentIndex(string token, const Column *csvData, int nPoints)
 	if (firstLetter == "L")
 	{
 		string label = token.substr(1, token.size());
-		for (int i = 0; i < nPoints; i++)
-		{
-			if (label == csvData[0].colValues[i])
-			{
-				value = i;
-				break;
-			}
-		}
+		value = csv.getLabelIndex(label);
 		if (value == -1)
 		{
 			printf("Label %s does not exist\n", label.c_str());
@@ -119,7 +112,6 @@ ArgParams parseArgs(int argc, char *argv[], Csv csv)
 	args.printData = defaultPrintData;
 	int nPoints = csv.getRows();
 	args.nPoints = nPoints;
-	Column* csvData = csv.getCsvData();
 
 	switch (argc)
 	{
@@ -174,8 +166,8 @@ ArgParams parseArgs(int argc, char *argv[], Csv csv)
 			break;
 		}
 
-		args.startIndex = parseArgumentIndex(argv[2], csvData, nPoints);
-		args.endIndex = parseArgumentIndex(argv[3], csvData, nPoints);
+		args.startIndex = parseArgumentIndex(argv[2], csv, nPoints);
+		args.endIndex = parseArgumentIndex(argv[3], csv, nPoints);
 		args.improvementThreshold = defaultImprovementThreshold;
 		if (args.endIndex == -1)
 		{
@@ -201,8 +193,8 @@ ArgParams parseArgs(int argc, char *argv[], Csv csv)
 				break;
 			}
 		}
-		args.startIndex = parseArgumentIndex(argv[2], csvData, nPoints);
-		args.endIndex = parseArgumentIndex(argv[3], csvData, nPoints);
+		args.startIndex = parseArgumentIndex(argv[2], csv, nPoints);
+		args.endIndex = parseArgumentIndex(argv[3], csv, nPoints);
 		if (args.endIndex == -1)
 		{
 			args.startIndex = -1;
@@ -212,8 +204,8 @@ ArgParams parseArgs(int argc, char *argv[], Csv csv)
 	case 6:
 	{
 		// filename, start, end, threshold, print given
-		args.startIndex = parseArgumentIndex(argv[2], csvData, nPoints);
-		args.endIndex = parseArgumentIndex(argv[3], csvData, nPoints);
+		args.startIndex = parseArgumentIndex(argv[2], csv, nPoints);
+		args.endIndex = parseArgumentIndex(argv[3], csv, nPoints);
 		if (args.endIndex == -1)
 		{
 			args.startIndex = -1;
