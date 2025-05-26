@@ -2,9 +2,6 @@ from pathlib import Path
 import random
 import csv
 
-#test
-
-
 
 def randomize(file_name):
     with open(file_name, "rt") as cf:
