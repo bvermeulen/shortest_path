@@ -25,12 +25,12 @@ $(SRCFILE): $(OBJ)
 
 .PHONY: clean
 clean:
-	echo "Clean $(SRCFILE) object file in $(OBJDIR) and executable in $(BUILD)"
+	@echo "Clean $(SRCFILE) object file in $(OBJDIR) and executable in $(BUILD)"
 	rm $(NAME_OBJ)
 	rm $(NAME_EXE)
 
 .PHONY: clean_all
 clean_all:
-	echo "Clean all object files in $(OBJDIR) and $(SRCFILE).exe in $(BUILD)"
+	@echo "Clean all object files in $(OBJDIR) and $(SRCFILE).exe in $(BUILD)"
 	rm $(OBJDIR)/*.o
 	rm $(NAME_EXE)
