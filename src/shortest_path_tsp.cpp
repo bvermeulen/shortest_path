@@ -94,7 +94,7 @@ void do2Opt_1(Point *path, int r1, int r2)
 {
     assert(r2 > r1);
     Point tmpPoint;
-    for (int i = 0; i < (r2 - r1) / 2; i++) 
+    for (int i = 0; i < (r2 - r1) / 2; i++)
     {
         tmpPoint = path[r1 + i + 1];
         path[r1 + i + 1] = path[r2 - i];
@@ -168,5 +168,5 @@ int main(int argc, char *argv[])
     printNodes(csvOutData, args.printData);
     string const csvOutFile = csvFile.substr(0, csvFile.find_last_of(".csv") - 3) + "_solution.csv";
     write_csv(csvOutFile, csvOutData);
-    return 0;
+    printf("The program is finished ...\n");
 }
