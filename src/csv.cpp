@@ -113,7 +113,7 @@ void printNodes(const vector<pair<string, vector<string>>> &csvData, bool printD
     string h1 = csvData[0].first;
     string h2 = csvData[1].first;
     string h3 = csvData[2].first;
-    printf("number of nodes: %3llu\n", csvData[0].second.size());
+    printf("number of nodes: %3lu\n", csvData[0].second.size());
     if (!printData)
         return;
     for (unsigned int i = 0; i < csvData[0].second.size(); i++)
