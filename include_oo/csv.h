@@ -11,7 +11,7 @@ class Csv
     private:
         static const int numberCols = 3;
         static const int numberRows = 2000;
-    
+
         struct Column
         {
             string colName;
@@ -29,7 +29,8 @@ class Csv
         int getLabelIndex(string label);
         void fillPath(Point *path);
         void createCsvData(const Point *path, int lenPath);
-        void printNodes(bool printData);
+        void printNodesCsv(bool printData);
+        void printNodesTxt(bool printData);
 };
 
 #endif // CSV_H

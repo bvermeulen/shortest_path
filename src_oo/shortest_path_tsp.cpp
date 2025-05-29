@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
     int startIndex = args.startIndex;
     int endIndex = args.endIndex;
     float improvementThreshold = args.improvementThreshold;
-    csv.printNodes(args.printData);
+    csv.printNodesTxt(args.printData);
     setStartIndex(startIndex, path);
     setEndIndex(endIndex, path, n);
 
@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
     myPlt.Save();
     myPlt.Show();
     csv.createCsvData(path, n);
-    csv.printNodes(args.printData);
+    csv.printNodesTxt(args.printData);
     string const csvOutFile = csvFile.substr(0, csvFile.find_last_of(".csv") - 3) + "_solution.csv";
     csv.write_csv(csvOutFile);
     printf("The program shorted_path_tsp_oo is finished ...\n");

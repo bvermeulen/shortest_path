@@ -172,8 +172,28 @@ void Csv::createCsvData(const Point* path, int lenPath)
     }
 }
 
-// Print the nodes
-void Csv::printNodes(bool printData)
+// Print the nodes in text format
+void Csv::printNodesTxt(bool printData)
+{
+    int numRows = getRows();
+
+    if (!printData)
+        return;
+
+    for (int i = 0; i < numRows; i++)
+    {
+        printf("%-s: %8s, %-s: %9.1f, %-s: %9.1f\n",
+               csvData[0].colName.c_str(),
+               csvData[0].colValues[i].c_str(),
+               csvData[1].colName.c_str(),
+               stof(csvData[1].colValues[i]),
+               csvData[2].colName.c_str(),
+               stof(csvData[2].colValues[i]));
+    }
+}
+
+// Print the nodes in csv format
+void Csv::printNodesCsv(bool printData)
 {
     int numRows = getRows();
 
