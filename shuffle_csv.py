@@ -3,7 +3,6 @@ import random
 import csv
 
 
-
 def randomize(file_name):
     with open(file_name, "rt") as cf:
         reader = csv.reader(cf)
