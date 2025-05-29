@@ -28,9 +28,11 @@
 
 using namespace std;
 
-const float cruiseSpeed = 15.0, accelaration = 2, deceleration = 1, upDelay = 2, downDelay = 3;
-const float instDelay = 0.0, sweep = 9.0;
-const float angleDelay30 = 8, angleDelay60 = 6, angleDelay90 = 5, angleDelay120 = 3, angleDelay150 = 1, angleDelay180 = 0;
+void getSitePackages()
+{
+    py::module site = py::module::import("site");
+    site.attr("addsitedir")(sitePackages);
+}
 
 float angle3points(const Point p1, const Point p2, const Point p3)
 {
@@ -77,7 +79,7 @@ float WeightedPathDuration(const Point *path, int nPoints)
         {
             angle = 0.0;
         }
-        else 
+        else
         {
             p1 = path[i - 1];
             angle = angle3points(p1, p2, p3);
@@ -94,7 +96,7 @@ void do2Opt_1(Point *path, int r1, int r2)
 {
     assert(r2 > r1);
     Point tmpPoint;
-    for (int i = 0; i < (r2 - r1) / 2; i++) 
+    for (int i = 0; i < (r2 - r1) / 2; i++)
     {
         tmpPoint = path[r1 + i + 1];
         path[r1 + i + 1] = path[r2 - i];
@@ -109,9 +111,11 @@ void do2Opt(Point *path, int r1, int r2)
 
 int main(int argc, char *argv[])
 {
-    PlotPaths myPlt;
-    string csvFile = getFileName(argc, argv);
+    py::scoped_interpreter guard{};
+    getSitePackages();
+    PlotPaths myPlt = PlotPaths();
     Csv csv = Csv();
+    string csvFile = getFileName(argc, argv);
     csv.read_csv(csvFile);
     ArgParams args = parseArgs(argc, argv, csv);
     // ArgParams args = setArgs();
@@ -168,5 +172,5 @@ int main(int argc, char *argv[])
     csv.printNodes(args.printData);
     string const csvOutFile = csvFile.substr(0, csvFile.find_last_of(".csv") - 3) + "_solution.csv";
     csv.write_csv(csvOutFile);
-    return 0;
+    printf("The program shorted_path_tsp_oo is finished ...\n");
 }

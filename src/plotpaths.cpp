@@ -1,8 +1,6 @@
-#include <tuple>
 #include <plotpaths.h>
 #include <shortest_path_tsp.h>
 #include <point.h>
-
 
 PlotPaths::PlotPaths()
 {
@@ -21,7 +19,7 @@ void PlotPaths::plotFullPath(const Point* path, int nPoints)
 		y1 = path[i + 1].y;
 		ax.plot(Args(py::make_tuple(x0, x1), py::make_tuple(y0, y1)));
 	}
-	this->counter += 1;
+	counter++;
 };
 
 void PlotPaths::Blit(float pauseSeconds)
@@ -37,6 +35,6 @@ void PlotPaths::Show()
 
 void PlotPaths::Save()
 {
-	string const OutFile = pngBaseFileName + to_string(this->counter) + ".png";
+	string const OutFile = pngBaseFileName + to_string(counter) + ".png";
 	fig.savefig(Args(OutFile.c_str()));
 };

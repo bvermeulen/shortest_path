@@ -5,17 +5,17 @@
 using namespace std;
 
 Csv::Csv() {
-    this->csvData = new Column[numberCols];
+    csvData = new Column[numberCols];
 }
 
 void Csv::initCsvData()
 {
-    for (int i = 0; i < numberCols - 1; i++)
+    for (int i = 0; i < numberCols; i++)
     {
         csvData[i].colName = "@";
     }
 
-    for (int i = 0; i < numberCols - 1; i++)
+    for (int i = 0; i < numberCols; i++)
     {
         for (int j = 0; j < numberRows; j++)
         {
@@ -79,12 +79,12 @@ void Csv::write_csv(string filename)
     myFile << "\n";
 
     // Send data to the stream
-    for (int i = 0; i < numCols; ++i)
+    for (int i = 0; i < numRows; ++i)
     {
-        for (int j = 0; j < numRows; ++j)
+        for (int j = 0; j < numCols; ++j)
         {
-            myFile << csvData[i].colValues[j];
-            if (j != numberRows - 1)
+            myFile << csvData[j].colValues[i];
+            if (j != numCols - 1)
                 myFile << ",";
         }
         myFile << "\n";
@@ -152,8 +152,6 @@ void Csv::fillPath(Point *path)
 void Csv::createCsvData(const Point* path, int lenPath)
 {
     ostringstream valStream;
-    Column *csvData;
-    csvData = new Column[numberCols];
     initCsvData();
 
     csvData[0].colName = "label";

@@ -6,13 +6,9 @@ using namespace std;
 
 void initCsvData(Column *csvData)
 {
-    for (int i = 0; i < numberCols - 1; i++)
+    for (int i = 0; i < numberCols; i++)
     {
         csvData[i].colName = "@";
-    }
-
-    for (int i = 0; i < numberCols - 1; i++)
-    {
         for (int j = 0; j < numberRows; j++)
         {
             csvData[i].colValues[j] = "@";
@@ -62,12 +58,12 @@ void write_csv(string filename, const Column *csvData)
     myFile << "\n";
 
     // Send data to the stream
-    for (int i = 0; i < numCols; ++i)
+    for (int i = 0; i < numRows; ++i)
     {
-        for (int j = 0; j < numRows; ++j)
+        for (int j = 0; j < numCols; ++j)
         {
-            myFile << csvData[i].colValues[j];
-            if (j != numberRows - 1)
+            myFile << csvData[j].colValues[i];
+            if (j != numCols - 1)
                 myFile << ",";
         }
         myFile << "\n";

@@ -28,6 +28,11 @@
 
 using namespace std;
 
+void getSitePackages()
+{
+    py::module site = py::module::import("site");
+    site.attr("addsitedir")(sitePackages);
+}
 
 float angle3points(const Point p1, const Point p2, const Point p3)
 {
@@ -107,9 +112,7 @@ void do2Opt(Point *path, int r1, int r2)
 int main(int argc, char *argv[])
 {
     py::scoped_interpreter guard{};
-    py::module site = py::module::import("site");
-    site.attr("addsitedir")(sitePackages);
-
+    getSitePackages();
     PlotPaths myPlt = PlotPaths();
     string csvFile = getFileName(argc, argv);
     Column *csvData = read_csv(csvFile);
@@ -169,5 +172,5 @@ int main(int argc, char *argv[])
     printNodes(csvOutData, args.printData);
     string const csvOutFile = csvFile.substr(0, csvFile.find_last_of(".csv") - 3) + "_solution.csv";
     write_csv(csvOutFile, csvOutData);
-    printf("The program is finished ...\n");
+    printf("The program shorted_path_tsp is finished ...\n");
 }

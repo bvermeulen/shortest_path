@@ -2,7 +2,6 @@
 #define PLOTPATHS
 #include <matplotlibcpp17/pyplot.h>
 #include "point.h"
-#pragma once
 
 class PlotPaths
 {
