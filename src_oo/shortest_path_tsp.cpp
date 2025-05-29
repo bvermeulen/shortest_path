@@ -28,9 +28,11 @@
 
 using namespace std;
 
-const float cruiseSpeed = 15.0, accelaration = 2, deceleration = 1, upDelay = 2, downDelay = 3;
-const float instDelay = 0.0, sweep = 9.0;
-const float angleDelay30 = 8, angleDelay60 = 6, angleDelay90 = 5, angleDelay120 = 3, angleDelay150 = 1, angleDelay180 = 0;
+void getSitePackages()
+{
+    py::module site = py::module::import("site");
+    site.attr("addsitedir")(sitePackages);
+}
 
 float angle3points(const Point p1, const Point p2, const Point p3)
 {
@@ -109,7 +111,9 @@ void do2Opt(Point *path, int r1, int r2)
 
 int main(int argc, char *argv[])
 {
-    PlotPaths myPlt;
+    py::scoped_interpreter guard{};
+    getSitePackages();
+    PlotPaths myPlt = PlotPaths();
     string csvFile = getFileName(argc, argv);
     Csv csv = Csv();
     csv.read_csv(csvFile);
@@ -123,7 +127,7 @@ int main(int argc, char *argv[])
     int startIndex = args.startIndex;
     int endIndex = args.endIndex;
     float improvementThreshold = args.improvementThreshold;
-    csv.printNodes(args.printData);
+    csv.printNodesTxt(args.printData);
     setStartIndex(startIndex, path);
     setEndIndex(endIndex, path, n);
 
@@ -165,7 +169,7 @@ int main(int argc, char *argv[])
     myPlt.Save();
     myPlt.Show();
     csv.createCsvData(path, n);
-    csv.printNodes(args.printData);
+    csv.printNodesTxt(args.printData);
     string const csvOutFile = csvFile.substr(0, csvFile.find_last_of(".csv") - 3) + "_solution.csv";
     csv.write_csv(csvOutFile);
     return 0;

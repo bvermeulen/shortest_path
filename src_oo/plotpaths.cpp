@@ -1,13 +1,6 @@
 #include <plotpaths.h>
-#include <matplotlibcpp17/pyplot.h>
 #include <../include_oo/shortest_path_tsp.h>
 #include <../include_oo/point.h>
-
-pybind11::scoped_interpreter guard{};
-pybind11::module site = pybind11::module::import("site");
-auto result = site.attr("addsitedir")("c:/data/python/venv/Lib/site-packages");
-auto plt = matplotlibcpp17::pyplot::import();
-auto [fig, ax] = plt.subplots(Kwargs("figsize"_a = py::make_tuple(7, 7)));
 
 PlotPaths::PlotPaths()
 {

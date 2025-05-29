@@ -29,7 +29,8 @@ class Csv
         int getLabelIndex(string label);
         void fillPath(Point *path);
         void createCsvData(const Point *path, int lenPath);
-        void printNodes(bool printData);
+        void printNodesTxt(bool printData);
+        void printNodesCsv(bool printData);
 };
 
 #endif // CSV_H

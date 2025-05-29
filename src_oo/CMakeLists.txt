@@ -16,8 +16,8 @@ find_package(Python3 COMPONENTS Interpreter Development)
 include_directories(
     includes
     ../include_oo
-    c:/data/cpp/matplotlibcpp17/include
-    c:/data/cpp/pybind11/include
+    d:/cpp/matplotlibcpp17/include
+    d:/cpp/pybind11/include
 )
 
 add_executable(shortest_path_oo ${sources} ${includes})

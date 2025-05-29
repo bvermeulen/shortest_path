@@ -6,12 +6,12 @@ using namespace std;
 
 void initCsvData(Column *csvData)
 {
-    for (int i = 0; i < numberCols - 1; i++)
+    for (int i = 0; i < numberCols; i++)
     {
         csvData[i].colName = "@";
     }
 
-    for (int i = 0; i < numberCols - 1; i++)
+    for (int i = 0; i < numberCols; i++)
     {
         for (int j = 0; j < numberRows; j++)
         {
