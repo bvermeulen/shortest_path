@@ -118,8 +118,12 @@ void printNodes(const vector<pair<string, vector<string>>> &csvData, bool printD
         return;
     for (unsigned int i = 0; i < csvData[0].second.size(); i++)
     {
-        printf("%s: %s, %s: %.1f, %s: %.1f\n",
-               h1.c_str(), csvData[0].second[i].c_str(), h2.c_str(),
-               stof(csvData[1].second[i]), h3.c_str(), stof(csvData[2].second[i]));
+        printf("%-s: %8s, %-s: %9.1f, %-s: %9.1f\n",
+               h1.c_str(), 
+               csvData[0].second[i].c_str(), 
+               h2.c_str(),
+               stof(csvData[1].second[i]), 
+               h3.c_str(), 
+               stof(csvData[2].second[i]));
     }
 }
