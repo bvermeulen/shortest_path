@@ -20,6 +20,7 @@ void write_csv(string filename, const Column *csvData);
 Column *read_csv(string filename);
 Point* createPath(const Column *csvData);
 Column* createCsvData(const Point* path, int lenPath);
-void printNodes(const Column *csvData, bool printData);
+void printNodesTxt(const Column *csvData, bool printData);
+void printNodesCsv(const Column *csvData, bool printData);
 
 #endif // CSV_H

@@ -169,8 +169,8 @@ int main(int argc, char *argv[])
     myPlt.Save();
     myPlt.Show();
     csv.createCsvData(path, n);
-    csv.printNodesTxt(args.printData);
+    csv.printNodesCsv(args.printData);
     string const csvOutFile = csvFile.substr(0, csvFile.find_last_of(".csv") - 3) + "_solution.csv";
     csv.write_csv(csvOutFile);
-    return 0;
+    printf("\nCompleted program shortest_path_tsp_oo.exe [array version] ...\n");
 }

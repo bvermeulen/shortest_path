@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
     int startIndex = args.startIndex;
     int endIndex = args.endIndex;
     float improvementThreshold = args.improvementThreshold;
-    printNodes(csvData, args.printData);
+    printNodesTxt(csvData, args.printData);
     // set the index for start point and end point
     int n = args.nPoints;
     setStartIndex(startIndex, path);
@@ -169,8 +169,8 @@ int main(int argc, char *argv[])
     myPlt.Save();
     myPlt.Show();
     Column *csvOutData = createCsvData(path, n);
-    printNodes(csvOutData, args.printData);
+    printNodesCsv(csvOutData, args.printData);
     string const csvOutFile = csvFile.substr(0, csvFile.find_last_of(".csv") - 3) + "_solution.csv";
     write_csv(csvOutFile, csvOutData);
-    return 0;
+    printf("\nCompleted program shortest_path_tsp.exe [array version] ...\n");
 }

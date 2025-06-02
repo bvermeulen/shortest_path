@@ -79,12 +79,12 @@ void Csv::write_csv(string filename)
     myFile << "\n";
 
     // Send data to the stream
-    for (int i = 0; i < numCols; ++i)
+    for (int i = 0; i < numRows; ++i)
     {
-        for (int j = 0; j < numRows; ++j)
+        for (int j = 0; j < numCols; ++j)
         {
-            myFile << csvData[i].colValues[j];
-            if (j != numberRows - 1)
+            myFile << csvData[j].colValues[i];
+            if (j != numCols - 1)
                 myFile << ",";
         }
         myFile << "\n";
@@ -176,7 +176,6 @@ void Csv::createCsvData(const Point* path, int lenPath)
 void Csv::printNodesTxt(bool printData)
 {
     int numRows = getRows();
-
     if (!printData)
         return;
 
@@ -196,18 +195,17 @@ void Csv::printNodesTxt(bool printData)
 void Csv::printNodesCsv(bool printData)
 {
     int numRows = getRows();
-
     if (!printData)
         return;
 
-    printf("%10s, %10s, %10s\n",
+    printf("%8s, %9s, %9s\n",
            csvData[0].colName.c_str(),
            csvData[1].colName.c_str(),
            csvData[2].colName.c_str());
 
     for (int i = 0; i < numRows; i++)
     {
-        printf("%10s, %10.1f, %10.1f\n",
+        printf("%8s, %9.1f, %9.1f\n",
                csvData[0].colValues[i].c_str(),
                stof(csvData[1].colValues[i]),
                stof(csvData[2].colValues[i]));
