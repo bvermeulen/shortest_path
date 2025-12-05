@@ -8,7 +8,7 @@
 
 using namespace std;
 
-const string sitePackages = "/home/bvermeulen/Python/venv/lib/python3.13/site-packages";
+const string sitePackages = "/home/bvermeulen/Python/venv/lib/python3.14/site-packages";
 const float rad_deg = 180 / 3.14159;
 const string pngBaseFileName = "./output/shortest_path_tsp_";
 
